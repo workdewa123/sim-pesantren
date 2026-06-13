@@ -2,28 +2,99 @@
 <html lang="id" class="scroll-smooth">
 
 <head>
+    <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Selamat Datang di {{ $profil->nama_pesantren ?? 'Pondok Pesantren' }}</title>
+    <title>CV Lintas Tech Artomoro — Solusi Digital & Teknologi</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap"
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap"
         rel="stylesheet">
+    <link rel="icon" href="{{ asset('img/logo.webp') }}" type="image/webp">
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#FFFFFF',
+                        secondary: '#A3A3A3',
+                        tertiary: '#374151',
+                        neutral: '#000000',
+                        surface: '#111111',
+                        'primary-90': '#F5F5F5',
+                        'neutral-80': '#1A1A1A',
+                    },
+                    borderRadius: {
+                        'framer-sm': '4px',
+                        'framer-md': '8px',
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
 
     <style>
-        body {
-            font-family: 'Plus Jakarta Sans', sans-serif;
+        /* Tipografi Editorial Kustom sesuai Spesifikasi */
+        .headline-display {
+            font-size: clamp(3.5rem, 8vw, 5.25rem);
+            /* Hingga 84px */
+            font-weight: 800;
+            line-height: 1.1;
+            letter-spacing: -0.05em;
         }
 
+        .headline-lg {
+            font-size: clamp(2.25rem, 5vw, 3.4rem);
+            /* Hingga 55px */
+            font-weight: 700;
+            line-height: 1.2;
+            letter-spacing: -0.03em;
+        }
+
+        .headline-md {
+            font-size: clamp(1.5rem, 3vw, 2.18rem);
+            /* Hingga 35px */
+            font-weight: 500;
+            line-height: 1.2;
+            letter-spacing: -0.02em;
+        }
+
+        .headline-sm {
+            font-size: 1.43rem;
+            /* 23px */
+            font-weight: 500;
+            line-height: 1.2;
+            letter-spacing: 0em;
+        }
+
+        .body-lg {
+            font-size: 1.125rem;
+            /* 18px */
+            line-height: 1.55;
+            letter-spacing: -0.01em;
+        }
+
+        .body-md {
+            font-size: 0.93rem;
+            /* 15px */
+            line-height: 1.53;
+            letter-spacing: -0.01em;
+        }
+
+        /* Mekanisme Scroll Triggered Animation */
         .tunggu-scroll {
             opacity: 0;
-            transform: translateY(40px);
-            transition: all 0.8s ease-out !important;
+            transform: translateY(30px);
+            transition: all 2s cubic-bezier(0.16, 1, 0.3, 1) !important;
         }
 
-        /* Keadaan aktif setelah terdeteksi scroll */
         .muncul-scroll {
             opacity: 1 !important;
             transform: translateY(0) !important;
@@ -31,79 +102,76 @@
     </style>
 </head>
 
-<body class="bg-black text-slate-800 antialiased selection:bg-blue-800 selection:text-white">
+@include('layouts.background')
 
-    <!-- ===== LOADING SCREEN ===== -->
+<body class="bg-neutral text-primary antialiased selection:bg-primary selection:text-neutral">
+
+    {{-- LOADING SCREEN --}}
     <div id="loading-screen"
-        class="fixed inset-0 z-[9999] bg-black flex flex-col items-center justify-center gap-8 transition-opacity duration-700">
+        class="fixed inset-0 z-[9999] bg-neutral flex flex-col items-center justify-center gap-8 transition-opacity duration-700">
 
-        <!-- Logo -->
-        <div class="flex flex-col items-center gap-5 animate-fade-in-up">
-            <img src="{{ asset('img/logo.webp') }}" alt="Logo"
-                class="w-24 h-24 object-contain drop-shadow-2xl rounded-2xl">
-
+        <div class="flex flex-col items-center gap-4">
             <div class="text-center space-y-1">
-                <p class="text-white font-black text-xl tracking-tight uppercase">CV Lintas Tech</p>
-                <p
-                    class="text-2xl font-black bg-gradient-to-r from-purple-400 to-violet-600 bg-clip-text text-transparent uppercase tracking-tight">
+                <p class="text-secondary font-semibold text-xs tracking-[0.2em] uppercase">CV Lintas Tech</p>
+                <p class="text-3xl font-extrabold text-primary uppercase tracking-tight">
                     Artomoro
                 </p>
             </div>
         </div>
 
-        <!-- Progress Bar -->
-        <div class="w-56 h-[3px] bg-white/10 rounded-full overflow-hidden">
-            <div id="loading-bar"
-                class="h-full w-0 bg-gradient-to-r from-purple-500 to-violet-500 rounded-full transition-all ease-out"
+        <div class="w-48 h-[2px] bg-tertiary rounded-none overflow-hidden">
+            <div id="loading-bar" class="h-full w-0 bg-primary transition-all ease-out"
                 style="transition-duration: 0ms;">
             </div>
         </div>
 
-        <!-- Label -->
-        <p id="loading-label" class="text-slate-500 text-[11px] font-semibold uppercase tracking-widest">
-            Memuat halaman...
+        <p id="loading-label" class="text-secondary text-[10px] font-medium uppercase tracking-[0.15em]">
+            Memuat aset...
         </p>
     </div>
-    <!-- ===== END LOADING SCREEN ===== -->
+    {{-- END LOADING SCREEN --}}
 
+    {{-- NAVBAR --}}
     <nav
-        class="fixed left-1/2 -translate-x-1/2 z-50 w-full bg-white/70 backdrop-blur-xl border border-white/20 shadow-[0_8px_30px_rgb(0,0,0,0.08)] transition-all duration-500">
+        class="fixed left-0 right-0 top-0 z-50 bg-neutral/85 backdrop-blur-md border-b border-tertiary transition-all duration-300">
+        <div class="max-w-7xl mx-auto h-16 px-6 md:px-10 flex items-center justify-between">
 
-        <div class="h-16 px-6 flex items-center">
-
-            <!-- Logo -->
-            <div class="flex items-center gap-3 flex-1">
-                <img src="{{ asset('img/logo.webp') }}" class="h-10 w-10 object-contain">
-
-                <span class="font-bold text-sm tracking-tight text-slate-900">
-                    CV Lintas Tech
+            <div class="flex items-center gap-3">
+                <span class="font-extrabold text-sm tracking-tight text-primary uppercase">
+                    Lintas Tech
                 </span>
             </div>
 
-            <!-- Menu -->
             <div class="hidden md:flex items-center gap-8">
-                <a href="#beranda" class="text-sm font-medium text-slate-600 hover:text-black transition">
+                <a href="#beranda"
+                    class="text-xs uppercase tracking-wider font-medium text-secondary hover:text-primary transition-colors">
                     Beranda
                 </a>
-
-                <a href="#profil" class="text-sm font-medium text-slate-600 hover:text-black transition">
+                <a href="#profil"
+                    class="text-xs uppercase tracking-wider font-medium text-secondary hover:text-primary transition-colors">
                     Profil
                 </a>
-
-                <a href="#visi-misi" class="text-sm font-medium text-slate-600 hover:text-black transition">
-                    Visi Misi
+                <a href="#layanan"
+                    class="text-xs uppercase tracking-wider font-medium text-secondary hover:text-primary transition-colors">
+                    Layanan
                 </a>
-
-                <a href="#kegiatan" class="text-sm font-medium text-slate-600 hover:text-black transition">
-                    Kegiatan
+                <a href="#portofolio"
+                    class="text-xs uppercase tracking-wider font-medium text-secondary hover:text-primary transition-colors">
+                    Portofolio
+                </a>
+                <a href="#kreator"
+                    class="text-xs uppercase tracking-wider font-medium text-secondary hover:text-primary transition-colors">
+                    Kreator
+                </a>
+                <a href="#alur-kerja"
+                    class="text-xs uppercase tracking-wider font-medium text-secondary hover:text-primary transition-colors">
+                    Alur Kerja
                 </a>
             </div>
 
-            <!-- CTA -->
-            <div class="flex-1 flex justify-end">
-                <a href="#kontak" class="px-5 py-2 rounded-xl
-                bg-black text-white text-sm font-semibold
-                hover:bg-slate-800 transition">
+            <div>
+                <a href="#kontak"
+                    class="h-10 px-5 inline-flex items-center justify-center bg-primary text-neutral text-xs font-semibold rounded-framer-sm hover:bg-primary-90 transition-colors uppercase tracking-wider">
                     Hubungi Kami
                 </a>
             </div>
@@ -111,276 +179,431 @@
         </div>
     </nav>
 
-    <section id="beranda" class="min-h-screen flex flex-col items-center justify-center px-6 text-center">
-
-        <!-- Logo -->
-        <div class="mb-8 p-6">
-            <img src="{{ asset('img/logo.webp') }}" alt="Logo CV Lintas Tech"
-                class="w-40 md:w-52 object-contain drop-shadow-2xl">
-        </div>
-
-        <!-- Judul -->
-        <div class="space-y-2">
-            <h1 class="text-5xl md:text-7xl font-black text-white tracking-tight">
-                CV LINTAS TECH
+    {{-- HEADER --}}
+    <header id="beranda"
+        class="min-h-screen flex flex-col items-center justify-center px-6 text-center max-w-5xl mx-auto pt-20 scroll-mt-20">
+        <div class="flex flex-col items-center space-y-4">
+            <p class="text-xs text-secondary uppercase tracking-[0.2em] font-semibold">Transformasi Bisnis Digital</p>
+            <img src="{{ asset('img/logo.webp') }}" alt="Logo"
+                class="w-24 h-24 object-contain drop-shadow-2xl rounded-2xl">
+            <h1 class="headline-display text-primary uppercase">
+                CV LINTAS TECH <br>
+                <span class="text-secondary">ARTOMORO</span>
             </h1>
-
-            <h2
-                class="text-5xl md:text-7xl font-black bg-gradient-to-r from-purple-400 to-violet-600 bg-clip-text text-transparent">
-                ARTOMORO
-            </h2>
         </div>
 
-        <!-- Subjudul -->
-        <p class="mt-10 text-lg md:text-2xl text-blue-400 font-medium ">
-            Solusi Digital dan Teknologi Terpercaya
+        <p class="mt-8 body-lg text-secondary max-w-2xl">
+            Sistem pengembangan digital premium beresolusi tinggi. Solusi terpercaya untuk pembuatan website,
+            optimalisasi mesin pencari, dan manajemen media sosial terintegrasi.
         </p>
 
-    </section>
-
-    <br>
-        <br>
-
-    <section id="profil" class="tunggu-scroll py-12 px-6 mx-auto max-w-7xl space-y-12 bg-white rounded-lg">
-        <div class="text-center max-w-xl mx-auto space-y-2 animate-fade-in-up">
-            <h2 class="text-2xl font-black text-slate-900 tracking-tight bottom-4">Profil perusahaan</h2>
-            <div class="w-12 h-1 bg-blue-300 mx-auto rounded-full mt-2"></div>
+        <div class="mt-10 flex flex-col sm:flex-row gap-4 w-full sm:w-auto">
+            <a href="#layanan"
+                class="h-10 px-6 inline-flex items-center justify-center bg-primary text-neutral text-sm font-semibold rounded-framer-sm hover:bg-primary-90 transition-colors uppercase tracking-wide">
+                Layanan
+            </a>
+            <a href="#kontak"
+                class="h-10 px-6 inline-flex items-center justify-center bg-transparent text-primary border border-tertiary text-sm font-semibold rounded-framer-sm hover:bg-neutral-80 transition-colors uppercase tracking-wide">
+                Hubungi Konsultan
+            </a>
         </div>
-        <div
-            class="bg-white p-8 md:p-10 rounded-2xl border border-slate-200 shadow-sm hover:border-emerald-100 transition-colors duration-300 grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
+    </header>
 
-            <div class="space-y-5">
-                <h3 class="text-lg font-bold text-slate-900 flex items-center gap-2.5">Tentang Kami</h3>
-                <p class="text-slate-600 text-xs leading-relaxed whitespace-pre-line text-justify font-medium">
-                    {{ $profil->sejarah_singkat ?? 'Informasi sejarah singkat CV Lintas Tech belum diisi oleh Tim Media.' }}
-                </p>
-            </div>
-
-            {{--
-            ubah berdasarkan tabel dari database
-            --}}
-            <div class="w-full h-full flex justify-center items-center">
-                <img src="{{ asset('img/test.jpg') }}" alt="profil_perusahaan"
-                    class="w-600 max-h-400 object-cover rounded-xl">
-            </div>
-
-        </div>
-    </section>
-
-    <br>
-    <br>
-
-    {{-- Section Layanan Utama --}}
-    <section class="tunggu-scroll bg-[#0b1329] py-20 px-6 min-h-screen flex flex-col justify-center">
-        <div class="max-w-6xl mx-auto w-full space-y-12">
-
-            {{-- Judul Card --}}
-            <div class="flex items-center gap-4">
-                <div class="w-1.5 h-10 bg-blue-500 rounded-full"></div>
-                <h2 class="text-3xl md:text-4xl font-extrabold text-white tracking-tight">Layanan Utama</h2>
-            </div>
-
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-
-                {{-- Card 1 --}}
-                <div
-                    class="tunggu-scroll bg-[#111c3a] p-8 rounded-2xl border border-slate-800/60 shadow-xl space-y-4 hover:border-blue-500/30 transition-all duration-300 group">
-                    <div
-                        class="text-blue-500 text-3xl group-hover:scale-110 transition-transform duration-300 inline-block">
-                        <i class="fa-solid fa-code"></i>
-                    </div>
-                    <h3 class="text-xl font-bold text-white tracking-wide">Web Development</h3>
-                    <p class="text-slate-400 text-sm leading-relaxed font-medium">
-                        Pengembangan sistem informasi kustom berbasis Laravel, UI/UX modern, dan integrasi API yang
-                        tangguh.
-                    </p>
-                </div>
-
-                {{-- Card 2 --}}
-                <div
-                    class="tunggu-scroll bg-[#111c3a] p-8 rounded-2xl border border-slate-800/60 shadow-xl space-y-4 hover:border-blue-500/30 transition-all duration-300 group">
-                    <div
-                        class="text-blue-500 text-3xl group-hover:scale-110 transition-transform duration-300 inline-block">
-                        <i class="fa-solid fa-rocket"></i>
-                    </div>
-                    <h3 class="text-xl font-bold text-white tracking-wide">Digital Marketing (SEO & SEM)</h3>
-                    <p class="text-slate-400 text-sm leading-relaxed font-medium">
-                        Meningkatkan visibilitas bisnis melalui optimasi mesin pencari organik (SEO) dan manajemen
-                        kampanye iklan presisi (Google Ads).
-                    </p>
-                </div>
-
-                {{-- Card 3 --}}
-                <div
-                    class="tunggu-scroll bg-[#111c3a] p-8 rounded-2xl border border-slate-800/60 shadow-xl space-y-4 hover:border-blue-500/30 transition-all duration-300 group">
-                    <div
-                        class="text-blue-500 text-3xl group-hover:scale-110 transition-transform duration-300 inline-block">
-                        <i class="fa-solid fa-mobile-screen-button"></i>
-                    </div>
-                    <h3 class="text-xl font-bold text-white tracking-wide">Content Creation & SMM</h3>
-                    <p class="text-slate-400 text-sm leading-relaxed font-medium">
-                        Produksi konten kreatif dan optimasi media sosial (khususnya TikTok & IG Reels) untuk
-                        memaksimalkan <span class="italic text-slate-300">engagement</span> dan viralitas brand.
-                    </p>
-                </div>
-
-                {{-- Card 4 --}}
-                <div
-                    class="tunggu-scroll bg-[#111c3a] p-8 rounded-2xl border border-slate-800/60 shadow-xl space-y-4 hover:border-blue-500/30 transition-all duration-300 group">
-                    <div
-                        class="text-blue-500 text-3xl group-hover:scale-110 transition-transform duration-300 inline-block">
-                        <i class="fa-solid fa-server"></i>
-                    </div>
-                    <h3 class="text-xl font-bold text-white tracking-wide">Infrastructure</h3>
-                    <p class="text-slate-400 text-sm leading-relaxed font-medium">
-                        Penyediaan Hosting SSD performa tinggi, Domain profesional, serta setup keamanan dan analitik
-                        web komprehensif.
-                    </p>
-                </div>
-
-            </div>
-        </div>
-    </section>
-
-    {{-- daftar Website --}}
-    <section id="kegiatan" class="py-24 px-6 max-w-7xl mx-auto space-y-12">
-        <div class="text-center max-w-xl mx-auto space-y-2 animate-fade-in-up">
-            <h2 class="text-2xl font-black text-white tracking-tight">Daftar Website Yang Pernah Dibuat Oleh Kami
+    {{-- PORFIL --}}
+    <section id="profil" class="tunggu-scroll py-24 px-6 max-w-7xl mx-auto scroll-mt-20">
+        <div class="border-t border-tertiary pt-10 mb-16 grid grid-cols-1 md:grid-cols-3 gap-6">
+            <p class="text-xs text-secondary uppercase tracking-[0.2em] font-semibold">01 / PROFIL</p>
+            <h2 class="headline-lg text-primary uppercase md:col-span-2">Membantu Bisnis Beradaptasi dengan Era Baru
             </h2>
-            <div class="w-12 h-1 bg-blue-300 mx-auto rounded-full mt-2"></div>
         </div>
 
-        {{-- CARD 1 --}}
-        <div
-            class="tunggu-scroll bg-white p-8 md:p-10 rounded-2xl border border-slate-200 shadow-sm hover:border-emerald-100 transition-colors duration-300 grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
-            <div class="space-y-5">
-                <h3 class="text-lg font-bold text-slate-900 flex items-center gap-2.5">Contoh Website 1</h3>
-                <p class="text-slate-600 text-xs leading-relaxed whitespace-pre-line text-justify font-medium">
-                    {{ $profil->sejarah_singkat ?? 'Informasi sejarah singkat CV Lintas Tech belum diisi oleh Tim Media.' }}
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-12 items-start">
+            <div class="space-y-6">
+                <h3 class="text-xs uppercase tracking-widest text-primary font-bold">Tentang Perusahaan</h3>
+                <p class="body-md text-secondary leading-relaxed text-justify">
+                    CV Lintas Tech Artomoro adalah firma solusi teknologi independen yang bergerak di bidang optimasi
+                    digital berkelanjutan. Kami berkomitmen menyediakan layanan rekayasa perangkat lunak berskala
+                    tinggi, kampanye pemasaran presisi, produksi konten kreatif, serta penyediaan fondasi infrastruktur
+                    IT yang aman.
+                </p>
+                <p class="body-md text-secondary leading-relaxed text-justify">
+                    Fokus kami adalah menyelaraskan efisiensi operasional dengan kehadiran brand digital modern demi
+                    tercapainya pertumbuhan konversi bisnis Anda secara stabil dan terukur.
                 </p>
             </div>
-            <div class="w-full h-full flex justify-center items-center md:order-first">
-                <img src="{{ asset('img/test.jpg') }}" alt="profil_perusahaan"
-                    class="w-full max-h-72 object-cover rounded-xl">
-            </div>
-        </div>
 
-        {{-- CARD 2 --}}
-        <div
-            class="tunggu-scroll bg-white p-8 md:p-10 rounded-2xl border border-slate-200 shadow-sm hover:border-emerald-100 transition-colors duration-300 grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
-            <div class="space-y-5">
-                <h3 class="text-lg font-bold text-slate-900 flex items-center gap-2.5">Contoh Website 2</h3>
-                <p class="text-slate-600 text-xs leading-relaxed whitespace-pre-line text-justify font-medium">
-                    {{ $profil->sejarah_singkat ?? 'Informasi sejarah singkat CV Lintas Tech belum diisi oleh Tim Media.' }}
-                </p>
-            </div>
-            <div class="w-full h-full flex justify-center items-center md:order-first">
-                <img src="{{ asset('img/test.jpg') }}" alt="profil_perusahaan"
-                    class="w-full max-h-72 object-cover rounded-xl">
-            </div>
-        </div>
+            <div
+                class="border border-slate-800/80 rounded-[5px] p-3 bg-slate-900/40 backdrop-blur-md max-w-[624px] mx-auto shadow-xl">
 
-        {{-- CARD 3 --}}
-        <div
-            class="tunggu-scroll bg-white p-8 md:p-10 rounded-2xl border border-slate-200 shadow-sm hover:border-emerald-100 transition-colors duration-300 grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
-            <div class="space-y-5">
-                <h3 class="text-lg font-bold text-slate-900 flex items-center gap-2.5">Contoh Website 3</h3>
-                <p class="text-slate-600 text-xs leading-relaxed whitespace-pre-line text-justify font-medium">
-                    {{ $profil->sejarah_singkat ?? 'Informasi sejarah singkat CV Lintas Tech belum diisi oleh Tim Media.' }}
-                </p>
-            </div>
-            <div class="w-full h-full flex justify-center items-center md:order-first">
-                <img src="{{ asset('img/test.jpg') }}" alt="profil_perusahaan"
-                    class="w-full max-h-72 object-cover rounded-xl">
+                <div
+                    class="bg-neutral-950 rounded-1xl overflow-hidden aspect-[2/1] relative flex items-center justify-center border border-slate-900">
+
+                    <img src="https://media.tenor.com/ngY5lNArvSIAAAAe/catboss.png"
+                        alt="Abstraksi visual teknologi modern"
+                        class="w-full h-full object-cover grayscale opacity-90 transition-all duration-700 hover:scale-105 hover:grayscale-0"
+                        onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+
+                    <div
+                        class="hidden absolute inset-0 flex-col items-center justify-center p-6 text-center bg-slate-950/80 backdrop-blur-sm animate-fade-in">
+                        <i class="fa-solid fa-microchip text-blue-500 text-4xl mb-3 animate-pulse"></i>
+                        <span class="text-xs text-slate-400 font-bold tracking-widest uppercase">STUDIO PRODUKSI
+                            TEKNOLOGI</span>
+                    </div>
+
+                </div>
             </div>
         </div>
     </section>
+    <section id="layanan" class="tunggu-scroll py-24 bg-surface border-y border-tertiary scroll-mt-20">
+        <div class="max-w-7xl mx-auto px-6">
 
-    {{-- media sosial --}}
-    <section id="profil" class="tunggu-scroll py-12 px-6 mx-auto max-w-7xl">
-        <div
-            class="bg-white p-8 md:p-12 rounded-2xl border border-slate-800/60 shadow-xl grid grid-cols-1 md:grid-cols-2 gap-10 items-center">
+            <div class="border-t border-tertiary pt-10 mb-16 grid grid-cols-1 md:grid-cols-3 gap-6">
+                <p class="text-xs text-secondary uppercase tracking-[0.2em] font-semibold">02 / SPESIALISASI</p>
+                <h2 class="headline-lg text-primary uppercase md:col-span-2">Layanan Kami</h2>
+            </div>
 
-            <div class="space-y-6">
-                <div class="tunggu-scroll space-y-0">
-                    <p class="text-blue-600 text-sm md:text-base font-semibold tracking-wide">
-                        Creative & Social Media Division
+            <div
+                class="grid grid-cols-1 md:grid-cols-2 gap-px bg-tertiary border border-tertiary rounded-framer-md overflow-hidden">
+
+                <div class="bg-neutral p-10 space-y-6 hover:bg-neutral-80/40 transition-colors duration-300">
+                    <div class="text-primary text-xl flex items-center gap-3">
+                        <i class="fa-solid fa-code"></i>
+                        <span class="text-xs uppercase tracking-widest font-semibold text-secondary">02.1</span>
+                    </div>
+                    <h3 class="headline-sm text-primary uppercase">Web Development</h3>
+                    <p class="body-md text-secondary leading-relaxed">
+                        Pengembangan arsitektur informasi digital tangguh menggunakan kerangka kerja modern. Kami
+                        merancang sistem aplikasi web responsif, integrasi API pihak ketiga secara mulus, serta panel
+                        administrasi yang aman.
                     </p>
-                    <h3 class="text-3xl md:text-5xl font-black text-slate-900 tracking-tight leading-tight">
-                        Optimasi & Tren Digital
-                    </h3>
                 </div>
 
-                <p class="tunggu-scroll text-slate-600 text-sm leading-relaxed font-normal">
-                    Kami mengoptimasi kehadiran brand Anda di media sosial, dengan spesialisasi pada algoritma dan tren
-                    <span class="font-bold text-blue-600">TikTok</span> yang sedang hits, untuk menciptakan konten viral
-                    yang berkonversi.
-                </p>
+                <div class="bg-neutral p-10 space-y-6 hover:bg-neutral-80/40 transition-colors duration-300">
+                    <div class="text-primary text-xl flex items-center gap-3">
+                        <i class="fa-solid fa-arrow-trend-up"></i>
+                        <span class="text-xs uppercase tracking-widest font-semibold text-secondary">02.2</span>
+                    </div>
+                    <h3 class="headline-sm text-primary uppercase">SEO & SEM Marketing</h3>
+                    <p class="body-md text-secondary leading-relaxed">
+                        Optimalisasi keterpaparan organik pada mesin pencari utama. Kami menyusun analisis kata kunci
+                        strategis, perbaikan struktur halaman teknis, dan manajemen kampanye iklan berbayar (Google Ads)
+                        dengan fokus ROI tinggi.
+                    </p>
+                </div>
 
-                {{-- DIISI BERDASARKAN DATABASE --}}
-                <div class="space-y-3">
-                    <h4 class="tunggu-scroll text-sm font-bold text-blue-600 tracking-wide">Affiliated Creators:</h4>
-                    <div class="flex flex-wrap gap-3">
-                        <span
-                            class="px-4 py-2 bg-slate-800 border  rounded-xl text-xs font-semibold text-slate-300 transition-colors hover:bg-slate-700/50 cursor-pointer">@anis_khaeriyah</span>
-                        <span
-                            class="px-4 py-2 bg-slate-800 border  rounded-xl text-xs font-semibold text-slate-300 transition-colors hover:bg-slate-700/50 cursor-pointer">@apakatamiii</span>
-                        <span
-                            class="px-4 py-2 bg-slate-800 border  rounded-xl text-xs font-semibold text-slate-300 transition-colors hover:bg-slate-700/50 cursor-pointer">@uhuy</span>
+                <div class="bg-neutral p-10 space-y-6 hover:bg-neutral-80/40 transition-colors duration-300">
+                    <div class="text-primary text-xl flex items-center gap-3">
+                        <i class="fa-solid fa-hashtag"></i>
+                        <span class="text-xs uppercase tracking-widest font-semibold text-secondary">02.3</span>
+                    </div>
+                    <h3 class="headline-sm text-primary uppercase">Content & Social Media</h3>
+                    <p class="body-md text-secondary leading-relaxed">
+                        Produksi konten audio-visual vertikal berkualitas tinggi disesuaikan dengan algoritma media
+                        sosial mutakhir. Meningkatkan retensi pemirsa dan membangun interaksi aktif dengan representasi
+                        brand yang selaras.
+                    </p>
+                </div>
+
+                <div class="bg-neutral p-10 space-y-6 hover:bg-neutral-80/40 transition-colors duration-300">
+                    <div class="text-primary text-xl flex items-center gap-3">
+                        <i class="fa-solid fa-server"></i>
+                        <span class="text-xs uppercase tracking-widest font-semibold text-secondary">02.4</span>
+                    </div>
+                    <h3 class="headline-sm text-primary uppercase">IT Infrastructure</h3>
+                    <p class="body-md text-secondary leading-relaxed">
+                        Penyediaan solusi hosting dengan stabilitas tinggi, pendaftaran domain korporat profesional,
+                        konfigurasi proteksi keamanan digital (SSL), serta audit analitik performa infrastruktur server
+                        berkala.
+                    </p>
+                </div>
+
+            </div>
+        </div>
+    </section>
+    <section id="portofolio" class="tunggu-scroll py-24 px-6 max-w-7xl mx-auto space-y-16 scroll-mt-20">
+
+        <div class="border-t border-tertiary pt-10 mb-8 grid grid-cols-1 md:grid-cols-3 gap-6">
+            <p class="text-xs text-secondary uppercase tracking-[0.2em] font-semibold">03 / ARSIP KARYA</p>
+            <h2 class="headline-lg text-primary uppercase md:col-span-2">Proyek kami Yang Telah Selesai</h2>
+        </div>
+
+        <div class="space-y-8">
+            <div
+                class="tunggu-scroll bg-surface border border-tertiary rounded-framer-md p-6 md:p-8 grid grid-cols-1 md:grid-cols-12 gap-8 items-center">
+                <div class="md:col-span-7 space-y-4">
+                    <p class="text-xs text-secondary tracking-widest uppercase font-bold">REKAYASA AKADEMIK</p>
+                    <h3 class="headline-md text-primary uppercase">Sistem Academic Terintegrasi</h3>
+                    <p class="body-md text-secondary leading-relaxed text-justify">
+                        Sistem manajemen data pendidikan terpadu untuk pengarsipan rapor berkala, pencatatan performa
+                        siswa secara dinamis, dan fasilitas komunikasi internal instansi yang responsif di berbagai
+                        peranti mobile.
+                    </p>
+                </div>
+                <div
+                    class="md:col-span-5 border border-tertiary rounded-framer-sm overflow-hidden bg-neutral-80 aspect-[16/10] relative flex items-center justify-center">
+                    <img src="https://media.tenor.com/ngY5lNArvSIAAAAe/catboss.png" alt="[Tampilan Aplikasi Akademik]"
+                        class="w-full h-full object-cover grayscale opacity-80"
+                        onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                    <div class="hidden absolute inset-0 flex-col items-center justify-center p-4 bg-neutral">
+                        <i class="fa-solid fa-graduation-cap text-tertiary text-3xl mb-2"></i>
+                        <span class="text-[11px] text-secondary tracking-wider">ASET WEB AKADEMIK</span>
                     </div>
                 </div>
             </div>
 
             <div
-                class="tunggu-scroll w-full h-full min-h-[300px] flex justify-center items-center rounded-xl bg-slate-800/30 border border-slate-700/20 overflow-hidden">
-                <img src="{{ asset('img/test.jpg') }}" alt="Foto Produksi Konten TikTok/Sosmed"
-                    class="w-full h-full min-h-[300px] max-h-[450px] object-cover transition-transform duration-500 hover:scale-105">
+                class="tunggu-scroll bg-surface border border-tertiary rounded-framer-md p-6 md:p-8 grid grid-cols-1 md:grid-cols-12 gap-8 items-center">
+                <div class="md:col-span-7 space-y-4">
+                    <p class="text-xs text-secondary tracking-widest uppercase font-bold">PROFIL DIGITAL</p>
+                    <h3 class="headline-md text-primary uppercase">Landing Page Company Profile</h3>
+                    <p class="body-md text-secondary leading-relaxed text-justify">
+                        Halaman mendarat dengan orientasi kecepatan muat instan, dioptimalkan sepenuhnya untuk optimasi
+                        halaman pencarian (SEO), menampilkan identitas korporasi secara modern dan bersih.
+                    </p>
+                </div>
+                <div
+                    class="md:col-span-5 border border-tertiary rounded-framer-sm overflow-hidden bg-neutral-80 aspect-[16/10] relative flex items-center justify-center">
+                    <img src="https://media.tenor.com/ngY5lNArvSIAAAAe/catboss.png" alt="[Tampilan Landing Page]"
+                        class="w-full h-full object-cover grayscale opacity-80"
+                        onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                    <div class="hidden absolute inset-0 flex-col items-center justify-center p-4 bg-neutral">
+                        <i class="fa-solid fa-globe text-tertiary text-3xl mb-2"></i>
+                        <span class="text-[11px] text-secondary tracking-wider">ASET COMPANY PROFILE</span>
+                    </div>
+                </div>
+            </div>
+
+            <div
+                class="tunggu-scroll bg-surface border border-tertiary rounded-framer-md p-6 md:p-8 grid grid-cols-1 md:grid-cols-12 gap-8 items-center">
+                <div class="md:col-span-7 space-y-4">
+                    <p class="text-xs text-secondary tracking-widest uppercase font-bold">NIAGA ELEKTRONIK</p>
+                    <h3 class="headline-md text-primary uppercase">Platform Toko Online Mandiri</h3>
+                    <p class="body-md text-secondary leading-relaxed text-justify">
+                        Infrastruktur perdagangan daring independen dengan sistem inventori waktu nyata, alur pembayaran
+                        transparan, integrasi kalkulator biaya kirim instan, dan basis data aman.
+                    </p>
+                </div>
+                <div
+                    class="md:col-span-5 border border-tertiary rounded-framer-sm overflow-hidden bg-neutral-80 aspect-[16/10] relative flex items-center justify-center">
+                    <img src="https://media.tenor.com/ngY5lNArvSIAAAAe/catboss.png" alt="[Tampilan Aplikasi E-commerce]"
+                        class="w-full h-full object-cover grayscale opacity-80"
+                        onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                    <div class="hidden absolute inset-0 flex-col items-center justify-center p-4 bg-neutral">
+                        <i class="fa-solid fa-basket-shopping text-tertiary text-3xl mb-2"></i>
+                        <span class="text-[11px] text-secondary tracking-wider">ASET WEB E-COMMERCE</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <section id="kreator" class="tunggu-scroll py-15 px-6 max-w-7xl mx-auto scroll-mt-20">
+        <div class="border-t border-tertiary pt-10 mb-8 grid grid-cols-1 md:grid-cols-3 gap-6">
+            <p class="text-xs text-secondary uppercase tracking-[0.2em] font-semibold">04 / KREATIF & SOCIAL MEDIA
+                Division</p>
+            <h2 class="headline-lg text-primary uppercase md:col-span-2">Optimasi & Tren Digital</h2>
+        </div>
+        <div
+            class="bg-surface border border-tertiary rounded-framer-md p-8 md:p-12 grid grid-cols-1 md:grid-cols-2 gap-10 items-center">
+
+            <div class="space-y-6">
+
+                <p class="body-md text-secondary leading-relaxed">
+                    Kami merancang dan mengeksekusi materi kreatif yang disesuaikan dengan pola konsumsi konten masa
+                    kini. Berfokus pada optimalisasi di <span class="text-primary font-semibold">TikTok</span> dan <span
+                        class="text-primary font-semibold">Instagram Reels</span> guna membangun loyalitas komunitas
+                    digital yang solid.
+                </p>
+
+                <div class="space-y-3 pt-4">
+                    <h4 class="text-xs uppercase tracking-widest text-primary font-bold">Afiliasi Kreator Resmi:</h4>
+                    <div class="flex flex-wrap gap-2.5">
+                        <span
+                            class="px-3.5 py-1.5 bg-neutral border border-tertiary rounded-framer-sm text-xs font-medium text-secondary hover:text-primary hover:border-primary transition-colors cursor-pointer">@anis_khaeriyah</span>
+                        <span
+                            class="px-3.5 py-1.5 bg-neutral border border-tertiary rounded-framer-sm text-xs font-medium text-secondary hover:text-primary hover:border-primary transition-colors cursor-pointer">@apakatamiii</span>
+                        <span
+                            class="px-3.5 py-1.5 bg-neutral border border-tertiary rounded-framer-sm text-xs font-medium text-secondary hover:text-primary hover:border-primary transition-colors cursor-pointer">@uhuy</span>
+                    </div>
+                </div>
+            </div>
+
+            <div
+                class="border border-tertiary rounded-framer-sm overflow-hidden bg-neutral-80 aspect-[2/1] relative flex items-center justify-center">
+                <img src="https://media.tenor.com/ngY5lNArvSIAAAAe/catboss.png"
+                    alt="[Ilustrasi produksi pembuatan konten media sosial]"
+                    class="w-full h-full object-cover grayscale opacity-80 hover:scale-105 hover:grayscale-0 transition-all duration-500"
+                    onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                <div class="hidden absolute inset-0 flex-col items-center justify-center p-4 bg-neutral">
+                    <i class="fa-solid fa-clapperboard text-tertiary text-4xl mb-3"></i>
+                    <span class="text-xs text-secondary font-medium uppercase tracking-widest">PRODUKSI KONTEN
+                        SOSIAL</span>
+                </div>
             </div>
 
         </div>
     </section>
+    <section id="alur-kerja" class="tunggu-scroll py-20 px-6 max-w-7xl mx-auto scroll-mt-20">
+        <div class="border-t border-tertiary pt-10 mb-16 grid grid-cols-1 md:grid-cols-3 gap-6">
+            <p class="text-xs text-secondary uppercase tracking-[0.2em] font-semibold">05 / PROSES TIM</p>
+            <h2 class="headline-lg text-primary uppercase md:col-span-2">Alur Kerja Kami</h2>
+        </div>
 
-    <footer class="bg-slate-900 text-slate-400 text-xs py-12 border-t border-slate-800">
-        <div class="max-w-7xl mx-auto px-6 grid grid-cols-1 md:grid-cols-3 gap-10 pb-8 border-b border-slate-800">
-            <div class="space-y-4 flex flex-col items-center md:items-start text-center md:text-left">
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
 
-                <h4 class="font-extrabold text-sm tracking-tight text-white uppercase">
-                    {{ $profil->nama_pesantren ?? 'Pesantren' }}
+            <div
+                class="bg-surface border border-tertiary rounded-framer-md p-8 relative flex flex-col justify-between overflow-hidden group hover:border-primary/30 transition-colors duration-500">
+                <div class="space-y-4">
+                    <div class="flex items-center justify-between">
+                        <span class="text-xs font-mono text-secondary tracking-widest">PHASE 01</span>
+                        <i
+                            class="fa-solid fa-magnifying-glass text-secondary group-hover:text-primary transition-colors duration-500"></i>
+                    </div>
+                    <h3 class="headline-sm text-primary uppercase">Analisis & Strategi</h3>
+                    <p class="body-md text-secondary leading-relaxed">
+                        Konsultasi mendalam mengenai kebutuhan web, riset kata kunci kompetitor, serta pemetaan konsep
+                        konten digital yang relevan.
+                    </p>
+                </div>
+                <div
+                    class="absolute bottom-0 right-0 transform translate-x-4 translate-y-4 text-neutral-80/40 text-8xl font-black select-none pointer-events-none group-hover:text-neutral-80/70 transition-colors duration-500">
+                    1
+                </div>
+            </div>
+
+            <div
+                class="bg-surface border border-tertiary rounded-framer-md p-8 relative flex flex-col justify-between overflow-hidden group hover:border-primary/30 transition-colors duration-500">
+                <div class="space-y-4">
+                    <div class="flex items-center justify-between">
+                        <span class="text-xs font-mono text-secondary tracking-widest">PHASE 02</span>
+                        <i
+                            class="fa-solid fa-palette text-secondary group-hover:text-primary transition-colors duration-500"></i>
+                    </div>
+                    <h3 class="headline-sm text-primary uppercase">Desain</h3>
+                    <p class="body-md text-secondary leading-relaxed">
+                        Pembuatan rancangan prototype UI/UX aplikasi web yang interaktif serta perencanaan struktur
+                        kampanye iklan (Google Ads) yang matang.
+                    </p>
+                </div>
+                <div
+                    class="absolute bottom-0 right-0 transform translate-x-4 translate-y-4 text-neutral-80/40 text-8xl font-black select-none pointer-events-none group-hover:text-neutral-80/70 transition-colors duration-500">
+                    2
+                </div>
+            </div>
+
+            <div
+                class="bg-surface border border-tertiary rounded-framer-md p-8 relative flex flex-col justify-between overflow-hidden group hover:border-primary/30 transition-colors duration-500">
+                <div class="space-y-4">
+                    <div class="flex items-center justify-between">
+                        <span class="text-xs font-mono text-secondary tracking-widest">PHASE 03</span>
+                        <i
+                            class="fa-solid fa-terminal text-secondary group-hover:text-primary transition-colors duration-500"></i>
+                    </div>
+                    <h3 class="headline-sm text-primary uppercase">Eksekusi</h3>
+                    <p class="body-md text-secondary leading-relaxed">
+                        Proses penulisan kode (*coding*) website berbasis Laravel, konfigurasi teknis SEO, dan produksi
+                        aset konten media sosial.
+                    </p>
+                </div>
+                <div
+                    class="absolute bottom-0 right-0 transform translate-x-4 translate-y-4 text-neutral-80/40 text-8xl font-black select-none pointer-events-none group-hover:text-neutral-80/70 transition-colors duration-500">
+                    3
+                </div>
+            </div>
+
+            <div
+                class="bg-surface border border-tertiary rounded-framer-md p-8 relative flex flex-col justify-between overflow-hidden group hover:border-primary/30 transition-colors duration-500">
+                <div class="space-y-4">
+                    <div class="flex items-center justify-between">
+                        <span class="text-xs font-mono text-secondary tracking-widest">PHASE 04</span>
+                        <i
+                            class="fa-solid fa-chart-line text-secondary group-hover:text-primary transition-colors duration-500"></i>
+                    </div>
+                    <h3 class="headline-sm text-primary uppercase">Optimasi</h3>
+                    <p class="body-md text-secondary leading-relaxed">
+                        Pemantauan performa iklan secara berkala, penyesuaian tren algoritma sosial terbaru, dan
+                        pemeliharaan infrastruktur sistem.
+                    </p>
+                </div>
+                <div
+                    class="absolute bottom-0 right-0 transform translate-x-4 translate-y-4 text-neutral-80/40 text-8xl font-black select-none pointer-events-none group-hover:text-neutral-80/70 transition-colors duration-500">
+                    4
+                </div>
+            </div>
+
+        </div>
+    </section>
+    <footer id="kontak" class="bg-neutral text-secondary text-xs border-t border-tertiary pt-20 pb-12 scroll-mt-20">
+        <div class="max-w-7xl mx-auto px-6 grid grid-cols-1 md:grid-cols-3 gap-12 pb-16 border-b border-tertiary">
+
+            <div class="space-y-5 text-left">
+                <h4 class="font-extrabold text-sm tracking-widest text-primary uppercase">
+                    CV Lintas Tech Artomoro
                 </h4>
-
-                <a href="https://maps.app.goo.gl/ZziYFjjpPW9YNbqM9" target="_blank"
-                    class="leading-relaxed text-slate-400 hover:text-white flex items-start gap-2.5 group">
+                <a href="https://maps.app.goo.gl/ky8Ly6eq6xUhJbkv6" target="_blank"
+                    class="leading-relaxed text-secondary hover:text-primary flex items-start gap-3 group transition-colors">
                     <i
-                        class="fa-solid fa-location-dot text-emerald-400 mt-1 shrink-0 group-hover:scale-110 transition-transform"></i>
-                    <span class="group-hover:underline">
-                        {{ $profil->alamat ?? 'Jl. Kyai Ghozali No.138, Tegalpsangan, Pakiskembar, Kec. Pakis, Kabupaten Malang, Jawa Timur 65154' }}
+                        class="fa-solid fa-location-dot text-primary mt-1 shrink-0 group-hover:scale-110 transition-transform"></i>
+                    <span class="group-hover:underline body-md">
+                        Jl. Sunan Muria No.25, Dami, Ampeldento, Kec. Pakis, Kabupaten Malang, Jawa Timur 65154
+                    </span>
+                </a>
+                <a href="https://wa.me/+628563639797" target="_blank"
+                    class="leading-relaxed text-secondary hover:text-primary flex items-start gap-3 group transition-colors">
+                    <i
+                        class="fa-solid fa-phone text-primary mt-1 shrink-0 group-hover:scale-110 transition-transform"></i>
+                    <span class="group-hover:underline body-md">
+                        +628563639797 / +6285791436300
                     </span>
                 </a>
             </div>
-            <div class="space-y-3.5 flex flex-col items-center md:items-start">
-                <h4 class="font-bold text-white text-xs uppercase tracking-wider">Jejaring Sosial Resmi</h4>
-                <div class="flex gap-5 text-xl pt-1">
-                    @if($profil && $profil->instagram_link)<a href="{{ $profil->instagram_link }}" target="_blank"
-                    class="hover:text-amber-600 transition-colors"><i class="fa-brands fa-instagram"></i></a>@endif
-                    @if($profil && $profil->facebook_link)<a href="{{ $profil->facebook_link }}" target="_blank"
-                    class="hover:text-blue-500 transition-colors"><i class="fa-brands fa-facebook"></i></a>@endif
-                    @if($profil && $profil->youtube_link)<a href="{{ $profil->youtube_link }}" target="_blank"
-                    class="hover:text-rose-500 transition-colors"><i class="fa-brands fa-youtube"></i></a>@endif
+
+            <div class="space-y-4 flex flex-col items-start md:pl-8">
+                <h4 class="font-bold text-primary text-xs uppercase tracking-widest">Koneksi Sosial</h4>
+                <div class="flex gap-6 text-lg pt-1">
+                    <a href="https://instagram.com" target="_blank"
+                        class="hover:text-primary transition-colors text-secondary">
+                        <i class="fa-brands fa-instagram"></i>
+                    </a>
+                    <a href="https://facebook.com" target="_blank"
+                        class="hover:text-primary transition-colors text-secondary">
+                        <i class="fa-brands fa-facebook"></i>
+                    </a>
+                    <a href="https://youtube.com" target="_blank"
+                        class="hover:text-primary transition-colors text-secondary">
+                        <i class="fa-brands fa-youtube"></i>
+                    </a>
                 </div>
             </div>
-            <div class="space-y-3 flex flex-col items-center md:items-start text-center md:text-left">
-                <h4 class="font-bold text-white text-xs uppercase tracking-wider">Kontak & Bantuan</h4>
-                <p class="text-slate-400 leading-relaxed font-medium">Hubungi admin pendaftaran jika tautan registrasi
-                    formulir bermasalah atau untuk informasi kehumasan lebih lanjut.</p>
+
+            <div class="space-y-4">
+                <h4 class="font-bold text-primary text-xs uppercase tracking-widest">Kolaborasi Digital</h4>
+                <p class="body-md text-secondary leading-relaxed">
+                    Ajukan penawaran, rancangan konsep, atau konsultasi kebutuhan sistem informasi Anda langsung kepada
+                    tim spesialis kami.
+                </p>
+                <div class="pt-2">
+                    <a href="mailto:hello@lintastech.id"
+                        class="h-10 px-4 inline-flex items-center justify-center bg-transparent border border-tertiary text-primary text-xs font-semibold rounded-framer-sm hover:bg-neutral-80 transition-colors uppercase tracking-widest">
+                        Kirim Surat Elektronik
+                    </a>
+                </div>
+            </div>
+
+        </div>
+
+        <div
+            class="max-w-7xl mx-auto px-6 pt-8 flex flex-col sm:flex-row justify-between items-center gap-4 text-[11px] text-secondary tracking-tight">
+            <div class="text-center sm:text-left leading-relaxed">
+                © 2026 CV Lintas Tech Artomoro. Seluruh Hak Cipta Dilindungi. <br>
+                Direkayasa secara berkelanjutan.
+            </div>
+            <div class="flex gap-4">
+                <a href="#" class="hover:text-primary transition-colors">Syarat Layanan</a>
+                <span class="text-tertiary">/</span>
+                <a href="#" class="hover:text-primary transition-colors">Kebijakan Privasi</a>
             </div>
         </div>
-        <div
-            class="max-w-7xl mx-auto px-6 pt-6 text-center text-[11px] text-slate-500 font-medium tracking-tight leading-relaxed">
-            © {{ date('Y') }} {{ $profil->nama_pesantren ?? 'Pesantren App' }}. Seluruh Hak Cipta Dilindungi. <br>
-            Sistem Informasi Manajemen Terintegrasi Pondok Pesantren.
-        </div>
     </footer>
-
 </body>
 
 <script>
@@ -389,34 +612,31 @@
     const loadingBar = document.getElementById('loading-bar');
     const loadingLabel = document.getElementById('loading-label');
 
-    let currentPct = 0;   // posisi bar saat ini — tidak boleh mundur
-    let dismissed = false; // guard: dismissLoading hanya boleh jalan SEKALI
+    let currentPct = 0;
+    let dismissed = false;
 
-    // Fungsi set bar — menolak nilai yang lebih kecil dari posisi sekarang
     function setBar(pct, label) {
         if (pct <= currentPct) return;
         currentPct = pct;
         loadingBar.style.transitionDuration = '500ms';
         loadingBar.style.width = pct + '%';
-        if (label) loadingLabel.textContent = label;
+        if (label) loadingLabel.textContent = label.toUpperCase();
     }
 
-    // Animasi simulasi progress — delay KUMULATIF dari awal (bukan berantai)
-    // Bar berhenti MAKSIMAL di 85%, tidak akan ke 100 sebelum window.load terpicu
-    setTimeout(() => setBar(20, 'Memuat aset...'), 200);
-    setTimeout(() => setBar(45, 'Mengunduh konten...'), 700);
-    setTimeout(() => setBar(70, 'Menyiapkan tampilan...'), 1400);
-    setTimeout(() => setBar(85, 'Hampir selesai...'), 2200);
+    // Animasi simulasi loading bar modern
+    setTimeout(() => setBar(25, 'Memetakan pustaka gaya...'), 200);
+    setTimeout(() => setBar(50, 'Mendownload visual aset...'), 700);
+    setTimeout(() => setBar(75, 'Merender struktur halaman...'), 1400);
+    setTimeout(() => setBar(90, 'Optimalisasi visual selesai...'), 2200);
 
     function dismissLoading() {
-        if (dismissed) return; // tolak pemanggilan ganda
+        if (dismissed) return;
         dismissed = true;
 
-        // Paksa 100% dulu, baru fade out
-        setBar(100, 'Selesai!');
+        setBar(100, 'Memuat Selesai');
 
         setTimeout(() => {
-            loadingScreen.style.transition = 'opacity 0.7s ease';
+            loadingScreen.style.transition = 'opacity 0.7s cubic-bezier(0.16, 1, 0.3, 1)';
             loadingScreen.style.opacity = '0';
             setTimeout(() => {
                 if (loadingScreen.parentNode) loadingScreen.remove();
@@ -424,52 +644,51 @@
         }, 500);
     }
 
-    // HANYA window.load yang boleh trigger dismiss utama
     window.addEventListener('load', dismissLoading);
 
-    // Fallback darurat: jika setelah 15 detik load belum selesai (koneksi sangat lambat)
+    // Emergency fallback jika load terhambat koneksi lambat
     setTimeout(() => { if (!dismissed) dismissLoading(); }, 15000);
 
-    // ===== LOGIK ANIMASI ON SCROLL =====
+    // ===== SCROLL OBSERVER ANIMATION =====
     const observer = new IntersectionObserver((entries) => {
         entries.forEach((entry) => {
             if (entry.isIntersecting) {
-                // Tambahkan class animasi ketika elemen masuk ke area layar
                 entry.target.classList.add('muncul-scroll');
             }
         });
     }, {
-        // Memberikan offset agar animasi baru terpicu saat elemen 10% masuk ke layar
         threshold: 0.1
     });
 
-    // Mengambil semua elemen yang ingin diberi efek scroll animation
     const elemenAnimasi = document.querySelectorAll('.tunggu-scroll');
     elemenAnimasi.forEach((el) => observer.observe(el));
 
-    // ===== NAVBAR LOGIC =====
+    // ===== NAVBAR SCROLL TRANSITION =====
     const navbar = document.querySelector("nav");
 
     function updateNavbar() {
-        if (window.scrollY > 10) {
-            navbar.classList.remove("opacity-0", "pointer-events-none");
+        if (window.scrollY > 30) {
+            navbar.classList.add("bg-neutral/95", "border-b", "border-tertiary");
         } else {
-            navbar.classList.add("opacity-0", "pointer-events-none");
+            navbar.classList.remove("bg-neutral/95");
         }
     }
 
-    // Cek setiap kali user scroll
     window.addEventListener("scroll", updateNavbar);
 
-    // Paksa scroll ke atas + evaluasi state navbar saat halaman selesai dimuat
-    // Ini menangani kasus browser restore posisi scroll setelah refresh
+    // Mulai dari paling atas saat render selesai
     window.addEventListener("load", () => {
         if (history.scrollRestoration) {
-            history.scrollRestoration = 'manual'; // nonaktifkan auto-restore scroll browser
+            history.scrollRestoration = 'manual';
         }
         window.scrollTo(0, 0);
         updateNavbar();
     });
+
+    // ===== LOGIKA MEMBERSIHKAN HASH URL SAAT REFRESH =====
+    if (window.location.hash) {
+        window.history.replaceState(null, null, window.location.pathname + window.location.search);
+    }
 </script>
 
 </html>

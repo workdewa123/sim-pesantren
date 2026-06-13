@@ -13,6 +13,7 @@ use App\Http\Controllers\Media\MediaController;
 Route::get('/', [LandingPageController::class, 'index'])->name('landing.index');
 Route::get('/kegiatan/{slug}', [LandingPageController::class, 'detailKegiatan'])->name('landing.kegiatan.detail');
 
+
 /**
  * ROUTE AUTENTIKASI
  **/
