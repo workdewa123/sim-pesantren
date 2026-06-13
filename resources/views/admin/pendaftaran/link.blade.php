@@ -7,7 +7,7 @@
 <div class="max-w-3xl bg-white rounded-2xl shadow-sm border border-slate-200/80 p-6 sm:p-8">
     <div class="mb-6">
         <h3 class="text-lg font-bold text-slate-800 tracking-tight">Pengaturan Akses Formulir Digital</h3>
-        <p class="text-sm text-slate-500 mt-1">Sesuai kebijakan keamanan, formulir pendaftaran tidak dipublikasikan secara bebas. Gunakan tautan privat di bawah ini untuk dibagikan kepada calon wali santri melalui WhatsApp atau media sosial lainnya[cite: 1].</p>
+        <p class="text-sm text-slate-500 mt-1">Sesuai kebijakan keamanan, formulir pendaftaran tidak dipublikasikan secara bebas. Gunakan tautan privat di bawah ini untuk dibagikan kepada calon wali santri melalui WhatsApp atau media sosial lainnya.</p>
     </div>
 
     @if(session('success'))
