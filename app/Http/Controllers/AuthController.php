@@ -19,6 +19,7 @@ class AuthController extends Controller
     // Memproses data login
     public function login(Request $request)
     {
+        // 1. Validasi Input Form
         $credentials = $request->validate([
             'email' => ['required', 'email'],
             'password' => ['required'],
@@ -28,7 +29,34 @@ class AuthController extends Controller
             'password.required' => 'Password wajib diisi.',
         ]);
 
-        return view('media.dashboard');
+        $remember = $request->has('remember');
+
+        // 2. Proses Autentikasi Ke Database
+        if (Auth::attempt($credentials, $remember)) {
+            // ID Session diperbarui demi keamanan
+            $request->session()->regenerate();
+
+            // AMBIL DATA USER (Pastikan dipanggil di DALAM blok IF setelah dipastikan sukses login)
+            $user = Auth::user();
+
+            // Jika user ditemukan dan memiliki kolom role 'admin'
+            if ($user && $user->role === 'admin') {
+                // Sinkronisasi otomatis ke tabel Spatie jika belum terdaftar
+                \Spatie\Permission\Models\Role::findOrCreate('admin');
+
+                if (!$user->hasRole('admin')) {
+                    $user->assignRole('admin');
+                }
+            }
+
+            // Redirect ke dashboard tujuan
+            return redirect()->intended('/dashboard-media');
+        }
+
+        // 3. Jika login gagal (Kredensial salah), lempar balik ke form login dengan pesan error
+        return back()->withErrors([
+            'email' => 'Kredensial yang Anda masukkan tidak cocok dengan data kami.',
+        ])->onlyInput('email');
     }
 
     // Memproses logout

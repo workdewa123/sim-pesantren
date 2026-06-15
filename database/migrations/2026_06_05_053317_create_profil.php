@@ -13,9 +13,8 @@ return new class extends Migration
             $table->id();
             $table->string('nama_perusahaan');
             $table->string('logo_perusahaan')->nullable();
+            $table->string('gambar_perusahaan')->nullable();
             $table->text('sejarah_singkat');
-            $table->text('visi');
-            $table->text('misi');
             $table->string('alamat');
             $table->string('whatsapp_kontak');
             $table->string('instagram_link')->nullable();
@@ -23,24 +22,10 @@ return new class extends Migration
             $table->string('youtube_link')->nullable();
             $table->timestamps();
         });
-
-        // 2. Tabel Berita / Kegiatan Perusahaan (CRUD Tim Media)
-        Schema::create('kegiatan', function (Blueprint $table) {
-            $table->id();
-            $table->string('judul_kegiatan');
-            $table->string('slug')->unique();
-            $table->text('deskripsi_singkat');
-            $table->longText('konten_lengkap');
-            $table->string('foto_kegiatan')->nullable();
-            $table->date('tanggal_kegiatan');
-            $table->string('penulis');
-            $table->timestamps();
-        });
     }
 
     public function down(): void
     {
         Schema::dropIfExists('profil_perusahaan');
-        Schema::dropIfExists('kegiatan');
     }
 };

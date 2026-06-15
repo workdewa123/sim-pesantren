@@ -21,7 +21,7 @@
                 <i class="fa-solid fa-arrow-left-long group-hover:-translate-x-1 transition-transform"></i> Kembali ke Beranda
             </a>
             <span class="font-extrabold text-[10px] uppercase tracking-widest text-slate-500 bg-slate-100 border border-slate-200/50 px-3.5 py-1.5 rounded-full select-none">
-                {{ $profil->nama_pesantren ?? 'Pesantren' }}
+                {{ $profil->nama_perusahaan ?? 'Perusahaan' }}
             </span>
         </div>
     </nav>

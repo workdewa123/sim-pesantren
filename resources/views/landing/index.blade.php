@@ -155,9 +155,9 @@
                     class="text-xs uppercase tracking-wider font-medium text-secondary hover:text-primary transition-colors">
                     Layanan
                 </a>
-                <a href="#portofolio"
+                <a href="#daftar-proyek"
                     class="text-xs uppercase tracking-wider font-medium text-secondary hover:text-primary transition-colors">
-                    Portofolio
+                    Daftar
                 </a>
                 <a href="#kreator"
                     class="text-xs uppercase tracking-wider font-medium text-secondary hover:text-primary transition-colors">
@@ -184,8 +184,13 @@
         class="min-h-screen flex flex-col items-center justify-center px-6 text-center max-w-5xl mx-auto pt-20 scroll-mt-20">
         <div class="flex flex-col items-center space-y-4">
             <p class="text-xs text-secondary uppercase tracking-[0.2em] font-semibold">Transformasi Bisnis Digital</p>
-            <img src="{{ asset('img/logo.webp') }}" alt="Logo"
-                class="w-24 h-24 object-contain drop-shadow-2xl rounded-2xl">
+            @if ($profil && $profil->logo_perusahaan)
+                <img src="{{ asset('storage/' . $profil->logo_perusahaan) }}" alt="Logo"
+                    class="w-24 h-24 object-contain drop-shadow-2xl rounded-2xl">
+            @else
+                <img src="{{ asset('img/logo.webp') }}" alt="Logo"
+                    class="w-24 h-24 object-contain drop-shadow-2xl rounded-2xl">
+            @endif
             <h1 class="headline-display text-primary uppercase">
                 CV LINTAS TECH <br>
                 <span class="text-secondary">ARTOMORO</span>
@@ -237,11 +242,15 @@
 
                 <div
                     class="bg-neutral-950 rounded-1xl overflow-hidden aspect-[2/1] relative flex items-center justify-center border border-slate-900">
-
-                    <img src="https://media.tenor.com/ngY5lNArvSIAAAAe/catboss.png"
-                        alt="Abstraksi visual teknologi modern"
-                        class="w-full h-full object-cover grayscale opacity-90 transition-all duration-700 hover:scale-105 hover:grayscale-0"
-                        onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                    @if ($profil && $profil->gambar_perusahaan)
+                        <img src="{{ asset('storage/' . $profil->gambar_perusahaan) }}" alt="Logo"
+                            class="w-full h-full object-cover grayscale opacity-90 transition-all duration-700 hover:scale-105 hover:grayscale-0"
+                            onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                    @else
+                        <img src="{{ asset('img/no_foto.jpg') }}" alt="Logo"
+                            class="w-full h-full object-cover grayscale opacity-90 transition-all duration-700 hover:scale-105 hover:grayscale-0"
+                            onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                    @endif
 
                     <div
                         class="hidden absolute inset-0 flex-col items-center justify-center p-6 text-center bg-slate-950/80 backdrop-blur-sm animate-fade-in">
@@ -320,14 +329,16 @@
             </div>
         </div>
     </section>
-    <section id="portofolio" class="tunggu-scroll py-24 px-6 max-w-7xl mx-auto space-y-16 scroll-mt-20">
+    <section id="daftar-proyek" class="tunggu-scroll py-24 px-6 max-w-7xl mx-auto space-y-16 scroll-mt-20">
 
         <div class="border-t border-tertiary pt-10 mb-8 grid grid-cols-1 md:grid-cols-3 gap-6">
-            <p class="text-xs text-secondary uppercase tracking-[0.2em] font-semibold">03 / ARSIP KARYA</p>
+            <p class="text-xs text-secondary uppercase tracking-[0.2em] font-semibold">03 / DAFTAR PROJEK</p>
             <h2 class="headline-lg text-primary uppercase md:col-span-2">Proyek kami Yang Telah Selesai</h2>
         </div>
 
         <div class="space-y-8">
+
+            {{-- Card 1 --}}
             <div
                 class="tunggu-scroll bg-surface border border-tertiary rounded-framer-md p-6 md:p-8 grid grid-cols-1 md:grid-cols-12 gap-8 items-center">
                 <div class="md:col-span-7 space-y-4">
@@ -351,6 +362,7 @@
                 </div>
             </div>
 
+            {{-- Card 2 --}}
             <div
                 class="tunggu-scroll bg-surface border border-tertiary rounded-framer-md p-6 md:p-8 grid grid-cols-1 md:grid-cols-12 gap-8 items-center">
                 <div class="md:col-span-7 space-y-4">
@@ -373,6 +385,7 @@
                 </div>
             </div>
 
+            {{-- Card 3 --}}
             <div
                 class="tunggu-scroll bg-surface border border-tertiary rounded-framer-md p-6 md:p-8 grid grid-cols-1 md:grid-cols-12 gap-8 items-center">
                 <div class="md:col-span-7 space-y-4">
@@ -396,6 +409,8 @@
             </div>
         </div>
     </section>
+
+    {{-- 04 / Kreatif & Social media --}}
     <section id="kreator" class="tunggu-scroll py-15 px-6 max-w-7xl mx-auto scroll-mt-20">
         <div class="border-t border-tertiary pt-10 mb-8 grid grid-cols-1 md:grid-cols-3 gap-6">
             <p class="text-xs text-secondary uppercase tracking-[0.2em] font-semibold">04 / KREATIF & SOCIAL MEDIA

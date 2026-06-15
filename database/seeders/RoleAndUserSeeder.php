@@ -12,10 +12,11 @@ class RoleAndUserSeeder extends Seeder
     public function run(): void
     {
         $media = User::updateOrCreate(
-            ['email' => 'test@gmail.com'],
             [
-                'name' => 'Tim Media & Publikasi',
-                'password' => Hash::make('12345678'), 
+                'name' => 'Admin',
+                'email' => 'test@gmail.com',
+                'role' => 'admin',
+                'password' => Hash::make('12345678'),
             ]
         );
     }

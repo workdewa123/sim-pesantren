@@ -1,4 +1,4 @@
-@extends('layouts.media') {{-- Sesuaikan dengan nama layout template utama Anda (misal: layouts.admin atau layouts.app) --}}
+@extends('layouts.sidebar')
 
 @section('title', 'Dashboard Media')
 @section('page_title', 'Dashboard Konten & Media')
@@ -10,7 +10,7 @@
             <span class="px-3 py-1 bg-white/20 rounded-full text-[10px] font-bold uppercase tracking-wider">Ruang Kerja Media</span>
             <h3 class="text-xl sm:text-2xl font-black tracking-tight">Selamat Datang!</h3>
             <p class="text-xs text-emerald-100/90 max-w-xl leading-relaxed">
-                Melalui halaman ini, Anda dapat memperbarui informasi resmi profil pondok pesantren, mengatur visi misi, serta merilis berita kegiatan santri ke halaman depan website.
+                Melalui halaman ini, Anda dapat memperbarui informasi.
             </p>
         </div>
         <div class="absolute right-0 bottom-0 translate-y-4 translate-x-4 opacity-10 text-9xl font-black select-none pointer-events-none">
@@ -25,7 +25,7 @@
                     <i class="fa-solid fa-hotel"></i>
                 </div>
                 <div class="space-y-1">
-                    <h4 class="font-bold text-slate-900 text-sm">Identitas & Profil Pesantren</h4>
+                    <h4 class="font-bold text-slate-900 text-sm">Identitas Perusahaan</h4>
                     <p class="text-slate-500 leading-relaxed">Kelola nama lembaga, sejarah pendirian, visi misi, kontak WhatsApp humas, hingga tautan media sosial resmi.</p>
                 </div>
             </div>
@@ -44,9 +44,9 @@
                     <p class="text-slate-500 leading-relaxed">Tulis artikel berita, agenda pondok, dokumentasi acara, serta pengumuman penting untuk konsumsi publik.</p>
                 </div>
             </div>
-            <a href="{{ route('media.kegiatan.index') }}" class="w-full text-center py-2.5 bg-emerald-800 hover:bg-emerald-900 text-white font-bold rounded-xl transition-all shadow-md shadow-emerald-800/10">
+            {{-- <a href="{{ route('media.kegiatan.index') }}" class="w-full text-center py-2.5 bg-emerald-800 hover:bg-emerald-900 text-white font-bold rounded-xl transition-all shadow-md shadow-emerald-800/10">
                 Manajemen Berita Kegiatan
-            </a>
+            </a> --}}
         </div>
     </div>
 </div>
