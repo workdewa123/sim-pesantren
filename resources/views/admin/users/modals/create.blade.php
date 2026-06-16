@@ -28,6 +28,18 @@
                     <label class="block font-semibold text-slate-700 mb-1.5">Alamat Email Resmi</label>
                     <input type="email" name="email" required placeholder="contoh@pesantren.com" class="w-full px-3 py-2.5 rounded-xl border border-slate-200 focus:outline-none focus:border-emerald-600 focus:ring-4 focus:ring-emerald-600/5 bg-slate-50 focus:bg-white transition-all placeholder:text-slate-400">
                 </div>
+
+                <div class="pb-3 border-b border-slate-50">
+                    <label class="block font-semibold text-slate-700 mb-1.5">Hak Akses Sistem (Role)</label>
+                    <select name="role" required class="w-full px-3 py-2.5 rounded-xl border border-slate-200 focus:outline-none focus:border-emerald-600 focus:ring-4 focus:ring-emerald-600/5 bg-slate-50 focus:bg-white transition-all cursor-pointer">
+                        <option value="" disabled selected>-- Pilih Otoritas Akses --</option>
+                        <option value="admin">Admin</option>
+                        <option value="pengawas">Pengawas</option>
+                        <option value="pencatat">Pencatat</option>
+                        <option value="bendahara">Bendahara</option>
+                        <option value="staf_media">Staf Media</option>
+                    </select>
+                </div>
                 
                 <div class="pb-2">
                     <label class="block font-semibold text-slate-700 mb-1.5">Kata Sandi Akses</label>

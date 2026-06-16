@@ -32,6 +32,11 @@
                     <span class="text-slate-400 font-medium">ID Pengguna</span>
                     <span id="detail_id" class="font-bold text-slate-700 bg-slate-100 px-2 py-0.5 rounded-md text-[10px]">-</span>
                 </div>
+
+                <div class="flex justify-between items-center py-2 border-b border-slate-50">
+                    <span class="text-slate-400 font-medium">Otoritas Akses</span>
+                    <span id="detail_role" class="font-bold text-blue-700 bg-blue-50 px-2 py-0.5 rounded-md text-[10px]">-</span>
+                </div>
                 
                 <div class="flex justify-between items-center py-2 border-b border-slate-50">
                     <span class="text-slate-400 font-medium">Status Akun</span>

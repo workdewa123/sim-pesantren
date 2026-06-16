@@ -13,59 +13,52 @@ class AuthController extends Controller
         if (Auth::check()) {
             return redirect()->intended('/admin/dashboard'); // Idealnya diarahkan ke dashboard masing-masing jika sudah login
         }
-        return view('auth.login');
+        $profil = \App\Models\ProfilPesantren::first(); 
+
+    // Kirim variabel $profil ke dalam view
+    return view('auth.login', compact('profil'));
     }
 
     // Memproses data login
-    public function login(Request $request)
-    {
-        $credentials = $request->validate([
-            'email' => ['required', 'email'],
-            'password' => ['required'],
-        ], [
-            'email.required' => 'Email wajib diisi.',
-            'email.email' => 'Format email tidak valid.',
-            'password.required' => 'Password wajib diisi.',
-        ]);
+public function login(Request $request)
+{
+    $credentials = $request->validate([
+        'email' => ['required', 'email'],
+        'password' => ['required'],
+    ], [
+        'email.required' => 'Email wajib diisi.',
+        'email.email' => 'Format email tidak valid.',
+        'password.required' => 'Password wajib diisi.',
+    ]);
 
-        if (Auth::attempt($credentials, $request->remember)) {
-            $request->session()->regenerate();
-
-            $user = Auth::user();
-            
-            // 1. Logika Otomatis untuk Pengawas & Pencatat
-            if (str_contains($user->email, 'pengawas') || str_contains($user->email, 'pencatat')) {
-                if (!$user->hasRole('pengawas', 'pencatat')) {
-                    $user->assignRole('pengawas', 'pencatat');
-                }
-                return redirect()->to('/admin/pelanggaran');
-            }
-
-            // 🌟 2. TAMBAHKAN LOGIKA BARU INI KHUSUS UNTUK BENDAHARA
-            if (str_contains($user->email, 'bendahara')) {
-                // Pastikan role bendahara terpasang di database Spatie
-                if (!$user->hasRole('bendahara')) {
-                    $user->assignRole('bendahara');
-                }
-                // Alihkan langsung ke dasbor keuangan miliknya agar terhindar dari Eror 403
-                return redirect()->route('admin.keuangan.dashboard');
-            }
-
-                // 🌟 3. LOGIKA BARU KHUSUS UNTUK STAF MEDIA
-            if (str_contains($user->email, 'media')) {
-                // Pastikan role staf_media terpasang di database Spatie
-                if (!$user->hasRole('staf_media')) {
-                    $user->assignRole('staf_media');
-                }
-                // Alihkan langsung ke dasbor media miliknya agar terhindar dari Eror
-                return redirect()->route('media.dashboard');
-            }
-
-            // Jika admin utama atau role lain, arahkan ke dashboard bawaan
-            return redirect()->intended('/admin/dashboard');
+    if (Auth::attempt($credentials, $request->remember)) {
+        $request->session()->regenerate();
+        $user = Auth::user();
+        
+        // 1. Jika Pengawas atau Pencatat
+        if (str_contains($user->email, 'pengawas') || str_contains($user->email, 'pencatat')) {
+            return redirect()->to('/admin/pelanggaran');
         }
+
+        // 2. Jika Bendahara
+        if (str_contains($user->email, 'bendahara')) {
+            return redirect()->to('/admin/keuangan/dashboard'); // Menggunakan URL langsung agar aman
+        }
+
+        // 3. Jika Staf Media
+        if (str_contains($user->email, 'media')) {
+            return redirect()->to('/dashboard-media'); // Menggunakan URL langsung sesuai prefix web.php
+        }
+
+        // 4. Jika Admin Utama (Gunakan URL langsung ke dasbor admin Anda)
+        return redirect()->to('/admin/dashboard'); 
     }
 
+    // Jika login gagal, kembalikan ke halaman login dengan pesan error
+    return back()->withErrors([
+        'email' => 'Kredensial yang diberikan tidak cocok dengan catatan kami.',
+    ])->onlyInput('email');
+}
     // Memproses logout
     public function logout(Request $request)
     {

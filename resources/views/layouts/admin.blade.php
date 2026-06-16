@@ -45,6 +45,14 @@
                     <i class="fa-solid fa-link w-5 text-center mr-3 text-emerald-400"></i>
                     Link Pendaftaran
                 </a>
+                <a href="{{ route('admin.biaya.index') }}" class="flex items-center px-4 py-3 text-sm font-medium rounded-lg transition-all duration-150 {{ Route::is('admin.biaya.*') ? 'bg-emerald-800 text-white shadow-md' : 'text-emerald-100 hover:bg-emerald-800/40 hover:text-white' }}">
+                    <i class="fa-solid fa-money-bill-transfer w-5 text-center mr-3 text-emerald-400"></i>
+                    Biaya Syahriyah
+                </a>
+                <a href="{{ route('admin.rincian.index') }}" class="flex items-center px-4 py-3 text-sm font-medium rounded-lg transition-all duration-150 {{ Route::is('admin.rincian.*') ? 'bg-emerald-800 text-white shadow-md' : 'text-emerald-100 hover:bg-emerald-800/40 hover:text-white' }}">
+                    <i class="fa-solid fa-receipt w-5 text-center mr-3 text-emerald-400"></i>
+                    Biaya Pendaftaran
+                </a>
 
                 <div class="pt-4 pb-2 px-4 text-xs font-semibold text-emerald-300/60 uppercase tracking-wider">Data Master</div>
                 <a href="{{ route('admin.santri.index') }}" class="flex items-center px-4 py-3 text-sm font-medium rounded-lg transition-all duration-150 {{ Route::is('admin.santri.*') ? 'bg-emerald-800 text-white shadow-md' : 'text-emerald-100 hover:bg-emerald-800/40 hover:text-white' }}">

@@ -23,7 +23,7 @@ Route::get('/home/kegiatan/{slug}', [LandingPageController::class, 'detailKegiat
 
 
 // 👥 2. RUTE DASHBOARD: Khusus Staf Media & Admin Utama (Terproteksi Spatie)
-Route::middleware(['auth', 'role:admin|staf_media'])->prefix('dashboard-media')->group(function () {
+Route::middleware(['auth', 'role:staf_media'])->prefix('dashboard-media')->group(function () {
     
     // Halaman Utama Dashboard Media
     Route::get('/', [MediaController::class, 'index'])->name('media.dashboard');
@@ -41,7 +41,7 @@ Route::middleware(['auth', 'role:admin|staf_media'])->prefix('dashboard-media')-
 });
 
 Route::get('/', function () {
-    return redirect()->route('login');
+    return redirect()->route('landing.index');
 });
 
 // Kelompok Rute Khusus Admin (Butuh Login)
@@ -49,6 +49,16 @@ Route::middleware(['auth', 'role:admin'])->prefix('admin')->group(function () {
     Route::get('/dashboard', [AdminController::class, 'index'])->name('admin.dashboard');
     Route::get('/pendaftaran-link', [PendaftaranController::class, 'index'])->name('admin.pendaftaran.link');
     Route::post('/pendaftaran-link/refresh', [PendaftaranController::class, 'refreshToken'])->name('admin.pendaftaran.refresh');
+
+    // Tambahkan ini di dalam grup route admin pada web.php
+    Route::get('/pengaturan-biaya', [App\Http\Controllers\Admin\PendaftaranController::class, 'indexBiaya'])->name('admin.biaya.index');
+    Route::post('/pengaturan-biaya/update', [App\Http\Controllers\Admin\PendaftaranController::class, 'updateBiaya'])->name('admin.biaya.update');
+
+    // CRUD Rincian Biaya Awal Pendaftaran (Uang Gedung, Seragam, dll)
+    Route::get('/rincian-biaya', [App\Http\Controllers\Admin\PendaftaranController::class, 'indexRincianBiaya'])->name('admin.rincian.index');
+    Route::post('/rincian-biaya/simpan', [App\Http\Controllers\Admin\PendaftaranController::class, 'storeRincianBiaya'])->name('admin.rincian.store');
+    Route::post('/rincian-biaya/update/{id}', [App\Http\Controllers\Admin\PendaftaranController::class, 'updateRincianBiaya'])->name('admin.rincian.update');
+    Route::delete('/rincian-biaya/hapus/{id}', [App\Http\Controllers\Admin\PendaftaranController::class, 'destroyRincianBiaya'])->name('admin.rincian.destroy');
 
     // TAMBAHKAN TIGA BARIS RUTE APPROVAL INI:
     Route::get('/persetujuan', [AdminController::class, 'persetujuanPendaftaran'])->name('admin.persetujuan.index');
@@ -114,6 +124,8 @@ Route::post('/register-santri/{token}', [PendaftaranController::class, 'storeFor
 // Rute Publik Pasca-Pendaftaran
 Route::get('/pendaftaran-sukses/{id}', [PendaftaranController::class, 'sukses'])->name('pendaftaran.sukses');
 Route::get('/pendaftaran-cetak/{id}', [PendaftaranController::class, 'cetakPdf'])->name('pendaftaran.cetak');
+// Tambahkan ini di dekat rute pendaftaran sukses publik pada web.php
+Route::get('/pendaftaran/sukses/{id}/cetak-biaya', [App\Http\Controllers\Admin\PendaftaranController::class, 'cetakBiayaPdf'])->name('pendaftaran.cetak_biaya');
 
 // =========================================================================
 // 🔒 KELOMPOK RUTE KHUSUS BENDAHARA (MANAJEMEN KEUANGAN & LAPORAN)

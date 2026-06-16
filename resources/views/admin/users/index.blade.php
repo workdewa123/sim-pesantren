@@ -28,6 +28,7 @@
                     <th class="p-3" width="8%">No</th>
                     <th class="p-3">Nama</th>
                     <th class="p-3">Email</th>
+                    <th class="p-3">Role Hak Akses</th> 
                     <th class="p-3 text-center" width="20%">Aksi</th>
                 </tr>
             </thead>
@@ -37,6 +38,15 @@
                     <td class="p-3 font-medium">{{ $users->firstItem() + $index }}</td>
                     <td class="p-3 font-semibold text-slate-800">{{ $user->name }}</td>
                     <td class="p-3 text-slate-500">{{ $user->email }}</td>
+                    <td class="p-3"> <span class="px-2 py-1 rounded-md font-bold uppercase text-[10px] 
+                            @if($user->role == 'admin') bg-rose-50 text-rose-700 border border-rose-100
+                            @elseif($user->role == 'bendahara') bg-amber-50 text-amber-700 border border-amber-100
+                            @elseif($user->role == 'staf_media') bg-blue-50 text-blue-700 border border-blue-100
+                            @else bg-slate-100 text-slate-700 border border-slate-200
+                            @endif">
+                            {{ str_replace('_', ' ', $user->role) }}
+                        </span>
+                    </td>
                     <td class="p-3 flex justify-center gap-1.5">
                         <button type="button" onclick="showUser({{ $user->id }})" class="p-2 text-blue-600 bg-blue-50 hover:bg-blue-100 rounded-lg cursor-pointer" title="Detail"><i class="fa-solid fa-eye"></i></button>
                         <button type="button" onclick="editUser({{ $user->id }})" class="p-2 text-slate-600 bg-slate-100 hover:bg-slate-200 rounded-lg cursor-pointer" title="Edit"><i class="fa-solid fa-pen-to-square"></i></button>
@@ -49,7 +59,7 @@
                 </tr>
                 @empty
                 <tr>
-                    <td colspan="4" class="p-5 text-center text-slate-400 bg-slate-50/30">Belum ada data pengguna sistem terdaftar.</td>
+                    <td colspan="5" class="p-5 text-center text-slate-400 bg-slate-50/30">Belum ada data pengguna sistem terdaftar.</td>
                 </tr>
                 @endforelse
             </tbody>
@@ -82,6 +92,7 @@
                 document.getElementById('detail_id').innerText = data.id;
                 document.getElementById('detail_name').innerText = data.name;
                 document.getElementById('detail_email').innerText = data.email;
+                document.getElementById('detail_role').innerText = data.role.replace('_', ' ').toUpperCase(); // Tambah Pengisian Role Detail
                 document.getElementById('detail_created').innerText = new Date(data.created_at).toLocaleDateString('id-ID', {day: 'numeric', month: 'long', year: 'numeric'});
                 openModal('modalDetail');
             });
@@ -94,6 +105,7 @@
             .then(data => {
                 document.getElementById('edit_name').value = data.name;
                 document.getElementById('edit_email').value = data.email;
+                document.getElementById('edit_role').value = data.role; // Tambah Set Dropdown Value di Modal Edit
                 document.getElementById('formEditUser').action = `/admin/users/${id}/update`;
                 openModal('modalEdit');
             });

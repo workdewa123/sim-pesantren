@@ -92,25 +92,48 @@
                 <div class="bg-slate-50 border border-slate-200 rounded-xl p-4 sm:p-5">
                     <p class="text-xs text-slate-600 leading-relaxed mb-4">Sesuai dengan ketentuan pesantren, saya selaku orang tua/wali menyatakan bersedia membayar Biaya Pendidikan Pondok Pesantren bulanan sebesar pilihan yang saya pilih di bawah ini:</p>
                     
-                    <div class="space-y-2">
-                        <label class="block text-xs font-semibold text-slate-600 mb-1">Pernyataan Kesanggupan Biaya Bulanan (SPP)</label>
-                        <div class="grid grid-cols-3 gap-3">
-                            <label class="flex flex-col items-center justify-center p-3 rounded-xl border border-slate-200 hover:bg-slate-50 cursor-pointer transition-all text-center gap-1">
-                                <input type="radio" name="kesanggupan_biaya" value="300000" checked class="radio-biaya w-4 h-4 text-emerald-600 focus:ring-emerald-500 border-slate-300 accent-emerald-700">
-                                <span class="text-xs font-bold text-slate-700 label-biaya">Rp 300.000</span>
-                                <span class="text-[9px] text-slate-400">Pilihan 01</span>
-                            </label>
-                            <label class="flex flex-col items-center justify-center p-3 rounded-xl border border-slate-200 hover:bg-slate-50 cursor-pointer transition-all text-center gap-1">
-                                <input type="radio" name="kesanggupan_biaya" value="400000" class="radio-biaya w-4 h-4 text-emerald-600 focus:ring-emerald-500 border-slate-300 accent-emerald-700">
-                                <span class="text-xs font-bold text-slate-700 label-biaya">Rp 400.000</span>
-                                <span class="text-[9px] text-slate-400">Pilihan 02</span>
-                            </label>
-                            <label class="flex flex-col items-center justify-center p-3 rounded-xl border border-slate-200 hover:bg-slate-50 cursor-pointer transition-all text-center gap-1">
-                                <input type="radio" name="kesanggupan_biaya" value="500000" class="radio-biaya w-4 h-4 text-emerald-600 focus:ring-emerald-500 border-slate-300 accent-emerald-700">
-                                <span class="text-xs font-bold text-slate-700 label-biaya">Rp 500.000</span>
-                                <span class="text-[9px] text-slate-400">Pilihan 03</span>
-                            </label>
+                    <div>
+                        <label class="block text-xs font-bold text-slate-700 uppercase tracking-wide mb-2"><i class="fa-solid fa-hand-holding-dollar mr-1 text-emerald-600"></i> Pilihan Kesanggupan Biaya Bulanan</label>
+                        <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                            @php
+                                // Ambil defaults biaya mukim di awal muat halaman
+                                $defaultBiaya = $configBiaya->where('jenis_santri', 'mukim')->values();
+                            @endphp
+                            
+                            @foreach([0, 1, 2] as $index)
+                                @if(isset($defaultBiaya[$index]))
+                                    <label class="border border-slate-200 rounded-xl p-3 flex items-center gap-3 cursor-pointer hover:bg-slate-50 transition-all shadow-sm">
+                                        <input type="radio" name="kesanggupan_biaya" value="{{ $defaultBiaya[$index]->nominal }}" {{ $index === 0 ? 'checked' : '' }} class="radio-biaya h-4 w-4 text-emerald-600 border-slate-300 accent-emerald-600">
+                                        <span class="label-biaya text-xs font-bold text-slate-700">{{ $defaultBiaya[$index]->teks_tampilan }}</span>
+                                    </label>
+                                @endif
+                            @endforeach
                         </div>
+                    </div>
+                </div>
+
+                <div class="mt-6 p-5 bg-slate-50 border border-slate-200 rounded-2xl space-y-3">
+                    <h4 class="text-xs font-bold text-slate-800 uppercase tracking-wide flex items-center gap-1.5">
+                        <i class="fa-solid fa-receipt text-emerald-600"></i> Rincian Estimasi Biaya Masuk Awal
+                    </h4>
+                    
+                    <div class="overflow-hidden border border-slate-200 rounded-xl bg-white">
+                        <table class="w-full text-left text-xs border-collapse">
+                            <thead>
+                                <tr class="bg-slate-100 text-slate-500 font-bold border-b border-slate-200">
+                                    <th class="p-2.5">Komponen Biaya</th>
+                                    <th class="p-2.5 text-right">Nominal</th>
+                                </tr>
+                            </thead>
+                            <tbody id="tabel-rincian-body" class="divide-y divide-slate-100 text-slate-700">
+                                </tbody>
+                            <tfoot>
+                                <tr class="bg-emerald-50/50 text-emerald-950 font-bold border-t border-slate-200">
+                                    <td class="p-2.5 text-slate-800">Total Biaya Pendaftaran</td>
+                                    <td id="tabel-total-biaya" class="p-2.5 text-right font-mono text-sm text-emerald-700">Rp 0</td>
+                                </tr>
+                            </tfoot>
+                        </table>
                     </div>
                 </div>
             </div>
@@ -147,31 +170,84 @@
 </html>
 
 <script>
+// AMBIL DATA DARI LARAVEL KE JAVASCRIPT
+const konfigurasiBiaya = @json($configBiaya);
+const rincianDinamis = @json($rincianBiaya);
+
+// Fungsi Utama untuk menghitung & mengganti tabel rincian biaya pendaftaran
+function hitungRincianBiaya() {
+    // 1. Ambil Jenis Santri yang sedang terpilih
+    const jenisTerpilih = document.querySelector('input[name="jenis_santri"]:checked').value;
+    
+    // 2. Ambil Nilai Biaya Bulanan (SPP) yang dipilih
+    const radioBiayaChecked = document.querySelector('input[name="kesanggupan_biaya"]:checked');
+    const biayaBulananSelected = radioBiayaChecked ? parseInt(radioBiayaChecked.value) : 0;
+
+    const tbody = document.getElementById('tabel-rincian-body');
+    tbody.innerHTML = ''; // bersihkan tabel lama
+    
+    let totalAkumulasi = 0;
+
+    // 3. Filter & Render rincian dari database yang cocok dengan jenis santri
+    rincianDinamis.forEach(item => {
+        if (item.jenis_santri === 'semua' || item.jenis_santri === jenisTerpilih) {
+            totalAkumulasi += item.nominal;
+
+            const tr = document.createElement('tr');
+            tr.innerHTML = `
+                <td class="p-2.5">${item.nama_komponen}</td>
+                <td class="p-2.5 text-right font-mono">Rp ${item.nominal.toLocaleString('id-ID')}</td>
+            `;
+            tbody.appendChild(tr);
+        }
+    });
+
+    // 4. Masukkan pilihan iuran bulanan ke dalam list rincian sebagai baris penutup
+    if (biayaBulananSelected > 0) {
+        totalAkumulasi += biayaBulananSelected;
+        const trBulanan = document.createElement('tr');
+        trBulanan.innerHTML = `
+            <td class="p-2.5 font-semibold text-slate-600">Iuran Bulanan (Pilihan)</td>
+            <td class="p-2.5 text-right font-mono font-semibold">Rp ${biayaBulananSelected.toLocaleString('id-ID')}</td>
+        `;
+        tbody.appendChild(trBulanan);
+    }
+
+    // 5. Tampilkan Total Keseluruhan
+    document.getElementById('tabel-total-biaya').innerText = `Rp ${totalAkumulasi.toLocaleString('id-ID')}`;
+}
+
+// Pasang trigger event listener ketika ada perubahan pilihan di form
+document.addEventListener("DOMContentLoaded", function() {
+    
+    // Trigger saat ganti Mukim / Non-Mukim
     document.querySelectorAll('input[name="jenis_santri"]').forEach(function(radio) {
         radio.addEventListener('change', function() {
             const radioBiaya = document.querySelectorAll('.radio-biaya');
             const labelBiaya = document.querySelectorAll('.label-biaya');
             
-            // UBAH DI SINI: Gunakan huruf kecil 'non-mukim' agar sinkron dengan value HTML
-            if (this.value === 'non-mukim') {
-                // Konfigurasi Nominal untuk Non-Mukim (Laju)
-                const nominalNonMukim = ['30000', '40000', '50000'];
-                const teksNonMukim = ['Rp 30.000', 'Rp 40.000', 'Rp 50.000'];
-                
-                radioBiaya.forEach((input, index) => {
-                    input.value = nominalNonMukim[index];
-                    labelBiaya[index].innerText = teksNonMukim[index];
-                });
-            } else {
-                // Kembali ke Konfigurasi Nominal Mukim (Asrama)
-                const nominalMukim = ['300000', '400000', '500000'];
-                const teksMukim = ['Rp 300.000', 'Rp 400.000', 'Rp 500.000'];
-                
-                radioBiaya.forEach((input, index) => {
-                    input.value = nominalMukim[index];
-                    labelBiaya[index].innerText = teksMukim[index];
-                });
-            }
+            const filteredBiaya = konfigurasiBiaya.filter(item => item.jenis_santri === this.value);
+            
+            filteredBiaya.forEach((biaya, index) => {
+                if (radioBiaya[index]) {
+                    radioBiaya[index].value = biaya.nominal;
+                    labelBiaya[index].innerText = biaya.teks_tampilan;
+                }
+            });
+
+            // Jalankan hitung ulang rincian komponen
+            hitungRincianBiaya();
         });
     });
+
+    // Trigger saat ganti pilihan nominal iuran bulanan
+    document.body.addEventListener('change', function(e) {
+        if (e.target && e.target.name === 'kesanggupan_biaya') {
+            hitungRincianBiaya();
+        }
+    });
+
+    // Jalankan kalkulasi pertama kali saat halaman selesai dimuat
+    hitungRincianBiaya();
+});
 </script>

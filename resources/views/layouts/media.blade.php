@@ -48,7 +48,7 @@
                 </div>
                 <div class="truncate">
                     <p class="text-xs font-semibold truncate">{{ Auth::user()->name }}</p>
-                    <p class="text-[9px] text-emerald-400 font-bold uppercase tracking-wider">{{ Auth::user()->roles->pluck('name')->first() ?? 'User' }}</p>
+                    <p class="text-[9px] text-emerald-400 font-bold uppercase tracking-wider">{{ Auth::user()->roles }}</p>
                 </div>
             </div>
             <form action="{{ route('logout') }}" method="POST" class="shrink-0">

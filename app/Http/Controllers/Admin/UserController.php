@@ -22,12 +22,14 @@ class UserController extends Controller
             'name' => 'required|string|max:255',
             'email' => 'required|string|email|max:255|unique:users',
             'password' => 'required|string|min:6',
+            'role' => 'required|string|in:admin,pengawas,pencatat,bendahara,staf_media', // Tambahan Validasi Role
         ]);
 
         User::create([
             'name' => $request->name,
             'email' => $request->email,
             'password' => Hash::make($request->password),
+            'role' => $request->role, // Tambahan Simpan Role
         ]);
 
         return redirect()->back()->with('success', 'User baru berhasil ditambahkan!');
@@ -36,13 +38,13 @@ class UserController extends Controller
     public function show($id)
     {
         $user = User::findOrFail($id);
-        return response()->json($user); // Dikirim sebagai JSON untuk dibaca Javascript Modal Detail
+        return response()->json($user);
     }
 
     public function edit($id)
     {
         $user = User::findOrFail($id);
-        return response()->json($user); // Dikirim sebagai JSON untuk dibaca Javascript Modal Edit
+        return response()->json($user);
     }
 
     public function update(Request $request, $id)
@@ -53,10 +55,12 @@ class UserController extends Controller
             'name' => 'required|string|max:255',
             'email' => ['required', 'string', 'email', 'max:255', Rule::unique('users')->ignore($user->id)],
             'password' => 'nullable|string|min:6',
+            'role' => 'required|string|in:admin,pengawas,pencatat,bendahara,staf_media', // Tambahan Validasi Role
         ]);
 
         $user->name = $request->name;
         $user->email = $request->email;
+        $user->role = $request->role; // Tambahan Update Role
         
         if ($request->filled('password')) {
             $user->password = Hash::make($request->password);
