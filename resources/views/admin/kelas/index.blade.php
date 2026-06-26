@@ -45,9 +45,9 @@
             <a href="{{ route('admin.kelas.kenaikan') }}" class="bg-amber-600 hover:bg-amber-700 text-white text-xs font-bold px-4 py-2.5 rounded-xl transition-all duration-150 shadow-sm flex items-center gap-1.5">
                 <i class="fa-solid fa-graduation-cap"></i> Kenaikan Kelas Massal ↗
             </a>
-            <a href="{{ route('admin.kelas.create') }}" class="bg-emerald-700 hover:bg-emerald-800 text-white text-xs font-bold px-4 py-2.5 rounded-xl transition-all duration-150 shadow-sm flex items-center gap-1.5">
+            <button type="button" onclick="openCreateModal()" class="bg-emerald-700 hover:bg-emerald-800 text-white text-xs font-bold px-4 py-2.5 rounded-xl transition-all duration-150 shadow-sm flex items-center gap-1.5">
                 <i class="fa-solid fa-plus"></i> Tambah Kelas
-            </a>
+            </button>
         </div>
     </div>
 

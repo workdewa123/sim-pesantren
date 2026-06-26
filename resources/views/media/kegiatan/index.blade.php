@@ -105,17 +105,28 @@
     }
 
     // Ajax Handler Form Pengisian Koreksi Edit
-    function editKegiatan(id) {
-        fetch(`/dashboard-media/kegiatan/${id}/edit`)
-            .then(res => res.json())
-            .then(data => {
-                document.getElementById('edit_judul').value = data.judul_kegiatan;
-                document.getElementById('edit_tanggal').value = data.tanggal_kegiatan;
-                document.getElementById('edit_deskripsi').value = data.deskripsi_singkat;
-                document.getElementById('edit_konten').value = data.konten_lengkap;
-                document.getElementById('formEditKegiatan').action = `/dashboard-media/kegiatan/${id}/update`;
-                openModal('modalEdit');
-            });
-    }
+// Ajax Handler Form Pengisian Koreksi Edit
+function editKegiatan(id) {
+    fetch(`/dashboard-media/kegiatan/${id}/edit`)
+        .then(res => res.json())
+        .then(data => {
+            document.getElementById('edit_judul').value = data.judul_kegiatan;
+            document.getElementById('edit_tanggal').value = data.tanggal_kegiatan;
+            document.getElementById('edit_deskripsi').value = data.deskripsi_singkat;
+            document.getElementById('edit_konten').value = data.konten_lengkap;
+            
+            // Kembalikan ke URL murni ini (karena sekarang di web.php posisinya sudah disamakan)
+            document.getElementById('formEditKegiatan').action = `/dashboard-media/kegiatan/${id}/update`;
+            
+            openModal('modalEdit');
+        });
+}
+// Jika ada session error dari validasi Laravel, buka kembali modal editnya
+@if ($errors->any())
+    window.onload = function() {
+        openModal('modalEdit');
+    };
+@endif
+
 </script>
 @endsection

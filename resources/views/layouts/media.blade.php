@@ -31,6 +31,9 @@
                 <a href="{{ route('media.dashboard') }}" class="flex items-center px-4 py-3 text-sm font-medium rounded-lg transition-all duration-150 {{ Route::is('admin.media.dashboard') ? 'bg-emerald-800 text-white shadow-inner' : 'text-emerald-100 hover:bg-emerald-800/50' }}">
                     <i class="fa-solid fa-chart-pie mr-3 text-base"></i> Dashboard Info
                 </a>
+                <a href="{{ route('media.masyayikh.index') }}" class="flex items-center px-4 py-3 text-sm font-medium rounded-lg transition-all duration-150 {{ Route::is('admin.media.masyayikh.index') ? 'bg-emerald-800 text-white shadow-inner' : 'text-emerald-100 hover:bg-emerald-800/50' }}">
+                    <i class="fa-solid fa-user-tie mr-3 text-base"></i> Daftar Masyayikh
+                </a>
                 <a href="{{ route('media.profil.edit') }}" class="flex items-center px-4 py-3 text-sm font-medium rounded-lg transition-all duration-150 {{ Route::is('admin.media.profil.edit') ? 'bg-emerald-800 text-white shadow-inner' : 'text-emerald-100 hover:bg-emerald-800/50' }}">
                     <i class="fa-solid fa-building-columns mr-3 text-base"></i> Profil Lembaga
                 </a>

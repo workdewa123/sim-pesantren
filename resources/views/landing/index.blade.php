@@ -19,6 +19,10 @@
         .animate-fade-in-up {
             animation: fadeInUp 0.8s ease-out forwards;
         }
+        .scrollbar-thin::-webkit-scrollbar { height: 5px; }
+        .scrollbar-thin::-webkit-scrollbar-track { background: #f1f5f9; border-radius: 10px; }
+        .scrollbar-thin::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
+        .scrollbar-thin::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
     </style>
 </head>
 <body class="bg-slate-50 text-slate-800 antialiased selection:bg-emerald-800 selection:text-white">
@@ -40,7 +44,11 @@
                 <a href="#beranda" class="hover:text-emerald-800 transition-colors duration-200">Beranda</a>
                 <a href="#profil" class="hover:text-emerald-800 transition-colors duration-200">Profil</a>
                 <a href="#visi-misi" class="hover:text-emerald-800 transition-colors duration-200">Visi & Misi</a>
+                <a href="#masyayikh" class="hover:text-emerald-800 transition-colors duration-200">Masyayikh</a>
                 <a href="#kegiatan" class="hover:text-emerald-800 transition-colors duration-200">Kegiatan</a>
+                <a href="#pendaftaran" class="hover:text-emerald-800 transition-colors duration-200">Pendaftaran</a>
+                <a href="#kontak" class="hover:text-emerald-800 transition-colors duration-200">Kontak</a>
+                <a href="#lokasi" class="hover:text-emerald-800 transition-colors duration-200">Lokasi</a>
             </div>
 
             <div class="flex items-center gap-3">
@@ -134,39 +142,175 @@
         </div>
     </section>
 
-    <section id="kegiatan" class="py-24 px-6 max-w-7xl mx-auto space-y-12">
-        <div class="text-center max-w-xl mx-auto space-y-2 animate-fade-in-up">
-            <h2 class="text-2xl font-black text-slate-900 tracking-tight">Kabar & Agenda Kegiatan Santri</h2>
-            <p class="text-slate-400 text-xs font-medium">Ikuti rilis berita, dokumentasi, dan transformasi agenda harian di pondok kami.</p>
-            <div class="w-12 h-1 bg-emerald-800 mx-auto rounded-full mt-2"></div>
+    <section class="max-w-7xl mx-auto px-6 py-20" id="masyayikh-section">
+        <div class="text-center mb-16">
+            <span class="text-amber-700 font-extrabold text-[11px] uppercase tracking-widest bg-amber-100/80 px-4 py-2 rounded-full border border-amber-200/50 shadow-sm">Sanad Keilmuan</span>
+            <h2 class="text-3xl md:text-4xl font-black text-slate-800 mt-4 tracking-tight">Masyayikh & Dewan Guru</h2>
+            <div class="w-12 h-1 bg-amber-600 mx-auto mt-4 rounded-full"></div>
+            <p class="text-slate-500 mt-4 text-sm max-w-md mx-auto leading-relaxed font-medium">Keteladanan bimbingan para pengasuh dan dewan guru dalam menjaga khazanah keilmuan syariat Islam.</p>
         </div>
 
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 text-xs">
-            @forelse($kegiatan as $row)
-            <div class="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden flex flex-col hover:shadow-lg transition-all group duration-300">
-                <div class="h-44 bg-slate-100 overflow-hidden relative">
-                    @if($row->foto_kegiatan)
-                        <img src="{{ asset('storage/' . $row->foto_kegiatan) }}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 brightness-95 group-hover:brightness-100">
-                    @else
-                        <div class="w-full h-full flex items-center justify-center text-slate-400">No Image Preview</div>
-                    @endif
-                </div>
-                <div class="p-5 flex-1 flex flex-col justify-between space-y-4">
-                    <div class="space-y-2.5">
-                        <p class="text-[10px] text-slate-400 font-bold uppercase tracking-wider"><i class="fa-regular fa-calendar mr-1.5"></i> {{ \Carbon\Carbon::parse($row->tanggal_kegiatan)->translatedFormat('d M Y') }}</p>
-                        <h4 class="font-extrabold text-sm text-slate-900 tracking-tight leading-snug line-clamp-2 group-hover:text-emerald-800 transition-colors">{{ $row->judul_kegiatan }}</h4>
-                        <p class="text-slate-500 leading-relaxed line-clamp-3 font-medium">{{ $row->deskripsi_singkat }}</p>
+        <div class="flex flex-nowrap gap-8 overflow-x-auto pb-6 snap-x snap-mandatory scroll-smooth scrollbar-thin" style="scrollbar-width: thin;">
+            @forelse($masyayikh as $tokoh)
+                <div class="flex flex-col items-center text-center group snap-start shrink-0 w-[260px] sm:w-[290px] md:w-[calc(33.333%-22px)] bg-white rounded-3xl border border-slate-100 p-6 shadow-sm hover:shadow-xl hover:border-amber-600/20 transition-all duration-300">
+                    
+                    <div class="relative">
+                        <div class="absolute inset-0 rounded-full border-2 border-dashed border-slate-200 group-hover:rotate-45 group-hover:border-amber-500 transition-all duration-700 p-1"></div>
+                        
+                        <a href="{{ route('landing.masyayikh.detail', $tokoh->slug) }}" class="block w-36 h-36 rounded-full overflow-hidden border-4 border-white shadow-md relative aspect-square shrink-0 z-10 m-1">
+                            <img src="{{ $tokoh->foto_masyayikh ? asset('storage/' . $tokoh->foto_masyayikh) : 'https://placehold.co/300?text=Masyayikh' }}" 
+                                alt="{{ $tokoh->nama_masyayikh }}" 
+                                class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500">
+                        </a>
                     </div>
-                    <a href="{{ route('landing.kegiatan.detail', $row->slug) }}" class="pt-2 font-bold text-emerald-800 hover:text-emerald-950 flex items-center gap-1.5 transition-all group">
-                        Baca Selengkapnya <i class="fa-solid fa-arrow-right-long text-xs group-hover:translate-x-1 transition-transform"></i>
-                    </a>
+                    
+                    <div class="mt-5 flex flex-col items-center flex-grow w-full">
+                        <span class="text-amber-700 font-extrabold text-[9px] uppercase tracking-wider bg-amber-50 px-3 py-1 rounded-full border border-amber-200/60 mb-2">
+                            {{ $tokoh->jabatan_pesantren ?? 'Dewan Guru' }}
+                        </span>
+                        
+                        <h4 class="font-black text-slate-800 text-sm group-hover:text-amber-600 transition-colors tracking-tight line-clamp-1 px-2">
+                            <a href="{{ route('landing.masyayikh.detail', $tokoh->slug) }}">{{ $tokoh->gelar }} {{ $tokoh->nama_masyayikh }}</a>
+                        </h4>
+                        
+                        <p class="text-slate-400 font-medium text-[11px] mt-2 line-clamp-3 px-2 leading-relaxed flex-grow">
+                            {{ strip_tags($tokoh->biografi_lengkap) }}
+                        </p>
+                        
+                        <a href="{{ route('landing.masyayikh.detail', $tokoh->slug) }}" class="mt-4 text-[10px] font-bold text-slate-600 group-hover:text-amber-600 flex items-center gap-1 transition-colors border-b border-slate-200 group-hover:border-amber-500 pb-0.5">
+                            Lihat Biografi <i class="fa-solid fa-chevron-right text-[8px]"></i>
+                        </a>
+                    </div>
+                </div>
+            @empty
+                <div class="w-full text-center py-12 bg-slate-50 rounded-2xl border border-dashed border-slate-200">
+                    <div class="w-12 h-12 bg-slate-100 rounded-full flex items-center justify-center text-slate-400 mx-auto mb-3">
+                        <i class="fa-solid fa-user-tie text-base"></i>
+                    </div>
+                    <h4 class="font-bold text-slate-700 text-xs">Data Masyayikh Kosong</h4>
+                    <p class="text-slate-400 text-[11px] mt-0.5">Data profil pengasuh dewan guru belum dirilis oleh tim media.</p>
+                </div>
+            @endforelse
+        </div>
+    </section>
+
+    <section id="kegiatan" class="py-24 px-6 max-w-7xl mx-auto space-y-12">
+        <div class="max-w-7xl mx-auto px-6 py-16" id="kegiatan-section">
+            <div class="flex flex-col md:flex-row md:items-end justify-between mb-10 gap-4">
+                <div>
+                    <span class="text-amber-600 font-bold text-xs uppercase tracking-wider bg-amber-50 px-3 py-1.5 rounded-full border border-amber-100/50">Warta Pondok</span>
+                    <h2 class="text-2xl md:text-3xl font-extrabold text-slate-800 mt-3 tracking-tight">Kegiatan & Berita Terbaru</h2>
+                    <p class="text-slate-500 mt-2 text-sm max-w-xl leading-relaxed font-medium">Ikuti terus perkembangan aktivitas harian santri, agenda hari besar, dan siaran pers resmi dari pondok pesantren.</p>
                 </div>
             </div>
-            @empty
-            <div class="col-span-3 p-12 text-center bg-white border border-slate-200 text-slate-400 rounded-2xl shadow-inner font-medium animate-pulse">
-                Belum ada dokumentasi rilis kegiatan publikasi saat ini.
+
+            <div class="flex flex-nowrap gap-6 overflow-x-auto pb-4 snap-x snap-mandatory scroll-smooth scrollbar-thin" style="scrollbar-width: thin;">
+                @forelse($kegiatan as $item)
+                    <div class="bg-white rounded-2xl border border-slate-100 shadow-sm hover:shadow-xl hover:border-amber-600/10 transition-all duration-300 overflow-hidden flex flex-col group snap-start shrink-0 w-[280px] sm:w-[320px] md:w-[calc(33.333%-16px)]">
+                        <div class="relative overflow-hidden aspect-[4/3] bg-slate-100 shrink-0">
+                            <img src="{{ $item->foto_kegiatan ? asset('storage/' . $item->foto_kegiatan) : 'https://placehold.co/600x400?text=No+Image' }}" 
+                                alt="{{ $item->judul_kegiatan }}" 
+                                class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+                            <div class="absolute inset-0 bg-gradient-to-t from-slate-900/40 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                        </div>
+                        
+                        <div class="p-5 flex flex-col flex-grow text-xs">
+                            <div class="flex items-center gap-3 text-[11px] text-slate-400 font-semibold mb-3">
+                                <span class="flex items-center gap-1 bg-slate-50 px-2 py-1 rounded-md">
+                                    <i class="fa-regular fa-calendar text-slate-400"></i>
+                                    {{ \Carbon\Carbon::parse($item->tanggal_kegiatan)->locale('id')->isoFormat('D MMMM Y') }}
+                                </span>
+                                <span class="flex items-center gap-1 bg-slate-50 px-2 py-1 rounded-md">
+                                    <i class="fa-regular fa-user text-slate-400"></i>
+                                    {{ $item->penulis }}
+                                </span>
+                            </div>
+                            
+                            <h3 class="font-bold text-slate-800 text-sm leading-snug group-hover:text-amber-600 transition-colors line-clamp-2 tracking-tight">
+                                {{ $item->judul_kegiatan }}
+                            </h3>
+                            
+                            <p class="text-slate-500 text-[11px] mt-2.5 leading-relaxed font-medium line-clamp-2 flex-grow">
+                                {{ $item->deskripsi_singkat }}
+                            </p>
+                            
+                            <div class="pt-4 mt-4 border-t border-slate-50 flex items-center justify-between shrink-0">
+                                <a href="{{ route('landing.kegiatan.detail', $item->slug) }}" class="text-xs font-bold text-slate-700 hover:text-amber-600 transition-colors flex items-center gap-1 group/btn cursor-pointer">
+                                    Baca Selengkapnya
+                                    <i class="fa-solid fa-arrow-right text-[10px] transform group-hover/btn:translate-x-0.5 transition-transform"></i>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                @empty
+                    <div class="w-full text-center py-12 bg-slate-50/50 rounded-2xl border border-dashed border-slate-200">
+                        <div class="w-12 h-12 bg-slate-100 rounded-xl flex items-center justify-center text-slate-400 mx-auto mb-3">
+                            <i class="fa-regular fa-newspaper text-lg"></i>
+                        </div>
+                        <h4 class="font-bold text-slate-700 text-xs">Belum Ada Berita</h4>
+                        <p class="text-slate-400 text-[11px] mt-0.5">Dokumentasi kegiatan resmi pondok pesantren belum dipublikasikan.</p>
+                    </div>
+                @endforelse
             </div>
-            @endforelse
+        </div>
+    </section>
+
+    <section class="bg-gradient-to-b from-slate-50 to-slate-100/50 border-y border-slate-200/60 py-20 relative overflow-hidden" id="pendaftaran-section">
+        <div class="absolute top-0 left-1/4 w-96 h-96 bg-emerald-500/5 rounded-full blur-3xl pointer-events-none"></div>
+        <div class="absolute bottom-0 right-1/4 w-96 h-96 bg-amber-500/5 rounded-full blur-3xl pointer-events-none"></div>
+
+        <div class="max-w-7xl mx-auto px-6 relative z-10">
+            <div class="text-center mb-16">
+                <span class="text-emerald-700 font-extrabold text-[11px] uppercase tracking-widest bg-emerald-100/80 px-4 py-2 rounded-full border border-emerald-200/50 shadow-sm">Penerimaan Santri Baru (PSB)</span>
+                <h2 class="text-3xl md:text-4xl font-black text-slate-800 mt-4 tracking-tight">Alur & Tata Cara Pendaftaran</h2>
+                <div class="w-12 h-1 bg-emerald-600 mx-auto mt-4 rounded-full"></div>
+                <p class="text-slate-500 mt-4 text-sm max-w-xl mx-auto leading-relaxed font-medium">Silakan ikuti 6 tahapan regulasi pendaftaran di bawah ini untuk bergabung menjadi santri baru di pondok pesantren.</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <div class="bg-white p-6 rounded-2xl border border-slate-200/60 shadow-sm flex gap-5 items-start group hover:border-emerald-600/30 hover:shadow-xl hover:-translate-y-1 transition-all duration-300">
+                    <div class="w-12 h-12 bg-gradient-to-br from-emerald-600 to-teal-700 rounded-xl flex items-center justify-center font-black text-white text-base shadow-md shadow-emerald-600/20 shrink-0 group-hover:scale-110 transition-transform duration-300">1</div>
+                    <div>
+                        <h4 class="font-bold text-slate-800 text-sm tracking-tight mb-1.5 group-hover:text-emerald-700 transition-colors">Hubungi Admin / Humas</h4>
+                        <p class="text-slate-500 text-[11px] leading-relaxed font-medium">Hubungi admin/humas via WhatsApp untuk meminta akses link formulir, atau kunjungi langsung kantor sekretariat pondok.</p>
+                    </div>
+                </div>
+                <div class="bg-white p-6 rounded-2xl border border-slate-200/60 shadow-sm flex gap-5 items-start group hover:border-emerald-600/30 hover:shadow-xl hover:-translate-y-1 transition-all duration-300">
+                    <div class="w-12 h-12 bg-gradient-to-br from-emerald-600 to-teal-700 rounded-xl flex items-center justify-center font-black text-white text-base shadow-md shadow-emerald-600/20 shrink-0 group-hover:scale-110 transition-transform duration-300">2</div>
+                    <div>
+                        <h4 class="font-bold text-slate-800 text-sm tracking-tight mb-1.5 group-hover:text-emerald-700 transition-colors">Pengisian Dokumen Online</h4>
+                        <p class="text-slate-500 text-[11px] leading-relaxed font-medium">Lakukan pengisian data berkas santri secara online dengan teliti melalui halaman resmi pendaftaran yang diberikan pengurus.</p>
+                    </div>
+                </div>
+                <div class="bg-white p-6 rounded-2xl border border-slate-200/60 shadow-sm flex gap-5 items-start group hover:border-emerald-600/30 hover:shadow-xl hover:-translate-y-1 transition-all duration-300">
+                    <div class="w-12 h-12 bg-gradient-to-br from-emerald-600 to-teal-700 rounded-xl flex items-center justify-center font-black text-white text-base shadow-md shadow-emerald-600/20 shrink-0 group-hover:scale-110 transition-transform duration-300">3</div>
+                    <div>
+                        <h4 class="font-bold text-slate-800 text-sm tracking-tight mb-1.5 group-hover:text-emerald-700 transition-colors">Unduh Berkas Hasil</h4>
+                        <p class="text-slate-500 text-[11px] leading-relaxed font-medium">Setelah data sukses tersimpan, unduh cetakan berkas kartu pendaftaran beserta rincian rujukan komponen biaya masuk.</p>
+                    </div>
+                </div>
+                <div class="bg-white p-6 rounded-2xl border border-slate-200/60 shadow-sm flex gap-5 items-start group hover:border-emerald-600/30 hover:shadow-xl hover:-translate-y-1 transition-all duration-300">
+                    <div class="w-12 h-12 bg-gradient-to-br from-emerald-600 to-teal-700 rounded-xl flex items-center justify-center font-black text-white text-base shadow-md shadow-emerald-600/20 shrink-0 group-hover:scale-110 transition-transform duration-300">4</div>
+                    <div>
+                        <h4 class="font-bold text-slate-800 text-sm tracking-tight mb-1.5 group-hover:text-emerald-700 transition-colors">Verifikasi Dokumen Fisik</h4>
+                        <p class="text-slate-500 text-[11px] leading-relaxed font-medium">Bawa berkas cetak fisik formulir pendaftaran tersebut ke kantor administrasi pesantren untuk divalidasi oleh panitia.</p>
+                    </div>
+                </div>
+                <div class="bg-white p-6 rounded-2xl border border-slate-200/60 shadow-sm flex gap-5 items-start group hover:border-emerald-600/30 hover:shadow-xl hover:-translate-y-1 transition-all duration-300">
+                    <div class="w-12 h-12 bg-gradient-to-br from-emerald-600 to-teal-700 rounded-xl flex items-center justify-center font-black text-white text-base shadow-md shadow-emerald-600/20 shrink-0 group-hover:scale-110 transition-transform duration-300">5</div>
+                    <div>
+                        <h4 class="font-bold text-slate-800 text-sm tracking-tight mb-1.5 group-hover:text-emerald-700 transition-colors">Lampiran Berkas Asli</h4>
+                        <p class="text-slate-500 text-[11px] leading-relaxed font-medium">Sertakan dokumen penunjang berupa lembar fotokopi Kartu Keluarga (KK) dan Akte Kelahiran calon santri baru.</p>
+                    </div>
+                </div>
+                <div class="bg-white p-6 rounded-2xl border border-slate-200/60 shadow-sm flex gap-5 items-start group hover:border-emerald-600/30 hover:shadow-xl hover:-translate-y-1 transition-all duration-300">
+                    <div class="w-12 h-12 bg-gradient-to-br from-emerald-600 to-teal-700 rounded-xl flex items-center justify-center font-black text-white text-base shadow-md shadow-emerald-600/20 shrink-0 group-hover:scale-110 transition-transform duration-300">6</div>
+                    <div>
+                        <h4 class="font-bold text-slate-800 text-sm tracking-tight mb-1.5 group-hover:text-emerald-700 transition-colors">Pelunasan Administrasi</h4>
+                        <p class="text-slate-500 text-[11px] leading-relaxed font-medium">Selesaikan proses pelunasan kontribusi biaya sesuai kesepakatan ketentuan instansi bendahara keuangan pondok.</p>
+                    </div>
+                </div>
+            </div>
         </div>
     </section>
 

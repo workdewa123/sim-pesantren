@@ -110,3 +110,17 @@
     </div>
 </div>
 @endsection
+
+<script>
+// Pasang event listener pada dropdown Kategori di form Buku Kas Umum Anda
+document.getElementById('kas_kategori_id').addEventListener('change', function() {
+    // Ambil data-tipe dari option yang dipilih (pemasukan / pengeluaran)
+    const selectedOption = this.options[this.selectedIndex];
+    const tipe = selectedOption.getAttribute('data-tipe'); 
+    
+    if(tipe) {
+        // Otomatis pilih/kunci radio button atau dropdown tipe_transaksi Anda
+        document.getElementById('jenis_transaksi_input').value = tipe;
+    }
+});
+</script>

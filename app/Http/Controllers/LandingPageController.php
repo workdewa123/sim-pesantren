@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\ProfilPesantren;
 use App\Models\KegiatanPesantren;
 use App\Models\Santri; // Opsional jika Anda sudah punya model Santri untuk hitung otomatis
+use App\Models\Masyayikh; // Model untuk tokoh masyayikh
 
 class LandingPageController extends Controller
 {
@@ -14,8 +15,10 @@ class LandingPageController extends Controller
         // Ambil data profil pesantren baris pertama
         $profil = ProfilPesantren::first();
         
-        // Ambil 3 kegiatan terbaru untuk ditampilkan di section berita
-        $kegiatan = KegiatanPesantren::orderBy('tanggal_kegiatan', 'desc')->take(3)->get();
+        // PERBAIKAN: Naikkan limit take(3) menjadi take(10) atau hapus batasan agar bisa scroll ke samping
+        $kegiatan = KegiatanPesantren::orderBy('tanggal_kegiatan', 'desc')->take(10)->get();
+        
+        $masyayikh = Masyayikh::orderBy('id', 'asc')->get();
         
         // Fitur inovasi: Hitung otomatis jumlah santri aktif dari database jika tabelnya ada
         $totalSantri = 0;
@@ -23,14 +26,21 @@ class LandingPageController extends Controller
             $totalSantri = \App\Models\Santri::count(); 
         }
 
-        return view('landing.index', compact('profil', 'kegiatan', 'totalSantri'));
+        return view('landing.index', compact('profil', 'kegiatan', "masyayikh", 'totalSantri'));
     }
-
     public function detailKegiatan($slug)
     {
         $profil = ProfilPesantren::first();
         $artikel = KegiatanPesantren::where('slug', $slug)->firstOrFail();
         
         return view('landing.detail_kegiatan', compact('profil', 'artikel'));
+    }
+
+    // <-- 4. TAMBAHKAN FUNGSI BARU UNTUK HALAMAN PROFIL BIOGRAFI TOKOH
+    public function detailMasyayikh($slug)
+    {
+        $profil = ProfilPesantren::first();
+        $tokoh = Masyayikh::where('slug', $slug)->firstOrFail();
+        return view('landing.detail_masyayikh', compact('profil', 'tokoh'));
     }
 }

@@ -13,7 +13,7 @@ class CheckRole
      *
      * @param  \Illuminate\Http\Request  $request
      * @param  \Closure  $next
-     * @param  string  $roleString  // Menangkap string role seperti "admin|staf_media"
+     * @param  string  $roleString  // Menangkap string role dari web.php (misal: "pengawas|pencatat")
      * @return \Symfony\Component\HttpFoundation\Response
      */
     public function handle(Request $request, Closure $next, string $roleString): Response
@@ -23,10 +23,10 @@ class CheckRole
             return redirect()->route('login');
         }
 
-        // 2. Pecah string "admin|staf_media" menjadi array ['admin', 'staf_media']
+        // 2. Pecah string "pengawas|pencatat" menjadi array ['pengawas', 'pencatat']
         $roles = explode('|', $roleString);
 
-        // 3. Cek apakah kolom role milik user ada di dalam array tersebut
+        // 3. Cek AKURAT berdasarkan kolom role di database
         if (!in_array($request->user()->role, $roles)) {
             abort(403, 'Anda tidak memiliki hak akses untuk halaman ini.');
         }

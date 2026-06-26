@@ -9,7 +9,7 @@
         <p class="text-xs text-slate-500 font-medium">Gunakan filter untuk memantau rekam jejak kedisiplinan harian santri.</p>
     </div>
     
-    @if(str_contains(Auth::user()->email, 'pencatat') && !str_contains(Auth::user()->email, 'pengawas'))
+    @if(Auth::user()->role === 'pencatat')
         <button type="button" onclick="bukaModal('create')" class="px-5 py-2.5 bg-emerald-700 hover:bg-emerald-800 text-white rounded-xl text-xs font-bold shadow-md shadow-emerald-700/10 transition-all flex items-center gap-2 self-start sm:self-auto">
             <i class="fa-solid fa-plus"></i> Catat Pelanggaran
         </button>
@@ -98,7 +98,7 @@
                                 <i class="fa-solid fa-clock-rotate-left"></i>
                             </button>
 
-                            @if(str_contains(Auth::user()->email, 'pencatat') && !str_contains(Auth::user()->email, 'pengawas'))
+                            @if(Auth::user()->role === 'pencatat')
                                 <form action="{{ route('admin.pelanggaran.destroy', $row->id) }}" method="POST" onsubmit="return confirm('Hapus catatan ini?')">
                                     @csrf
                                     @method('DELETE')
@@ -127,6 +127,7 @@
         </div>
     @endif
 </div>
+
 
 {{-- Memanggil File Modals --}}
 @include('admin.pelanggaran.modals.create')

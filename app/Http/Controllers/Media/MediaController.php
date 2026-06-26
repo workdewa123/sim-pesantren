@@ -87,32 +87,38 @@ class MediaController extends Controller
 
     public function storeKegiatan(Request $request)
     {
-        $request->validate([
-            'judul_kegiatan' => 'required|string|max:255',
-            'deskripsi_singkat' => 'required|max:500',
-            'konten_lengkap' => 'required',
-            'tanggal_kegiatan' => 'required|date',
-            'foto_kegiatan' => 'nullable|image|mimes:jpeg,png,jpg|max:2048'
-        ]);
+        // Hapus dd($request->all()) yang tadi, ganti dengan try-catch ini:
+        try {
+            $request->validate([
+                'judul_kegiatan' => 'required|string|max:255',
+                'deskripsi_singkat' => 'required|max:500',
+                'konten_lengkap' => 'required',
+                'tanggal_kegiatan' => 'required|date',
+                'foto_kegiatan' => 'nullable|image|mimes:jpeg,png,jpg|max:2048'
+            ]);
 
-        $fotoPath = null;
-        if ($request->hasFile('foto_kegiatan')) {
-            $fotoPath = $request->file('foto_kegiatan')->store('assets/kegiatan', 'public');
+            $fotoPath = null;
+            if ($request->hasFile('foto_kegiatan')) {
+                $fotoPath = $request->file('foto_kegiatan')->store('assets/kegiatan', 'public');
+            }
+
+            KegiatanPesantren::create([
+                'judul_kegiatan' => $request->judul_kegiatan,
+                'slug' => Str::slug($request->judul_kegiatan) . '-' . time(),
+                'deskripsi_singkat' => $request->deskripsi_singkat,
+                'konten_lengkap' => $request->konten_lengkap,
+                'tanggal_kegiatan' => $request->tanggal_kegiatan,
+                'foto_kegiatan' => $fotoPath,
+                'penulis' => Auth::user()->name
+            ]);
+
+            return redirect()->back()->with('success', 'Kegiatan baru berhasil dipublikasikan!');
+
+        } catch (\Exception $e) {
+            // Jika ada error (baik validasi atau database), bongkar di sini!
+            dd($e->getMessage());
         }
-
-        KegiatanPesantren::create([
-            'judul_kegiatan' => $request->judul_kegiatan,
-            'slug' => Str::slug($request->judul_kegiatan) . '-' . time(),
-            'deskripsi_singkat' => $request->deskripsi_singkat,
-            'konten_lengkap' => $request->konten_lengkap,
-            'tanggal_kegiatan' => $request->tanggal_kegiatan,
-            'foto_kegiatan' => $fotoPath,
-            'penulis' => Auth::user()->name
-        ]);
-
-        return redirect()->back()->with('success', 'Kegiatan baru berhasil dipublikasikan!');
     }
-
     public function editKegiatan($id)
     {
         $kegiatan = KegiatanPesantren::findOrFail($id);

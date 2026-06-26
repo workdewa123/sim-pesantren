@@ -28,4 +28,10 @@ class Santri extends Model
     {
         return $this->hasMany(Pelanggaran::class, 'santri_id');
     }
+
+    // Tambahkan fungsi ini di dalam class Santri di file app/Models/Santri.php
+    public function pembayaranIuranLain()
+    {
+        return $this->hasMany(PembayaranIuranLain::class, 'santri_id');
+    }
 }

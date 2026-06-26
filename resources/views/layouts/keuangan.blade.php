@@ -29,12 +29,18 @@
                 <a href="{{ route('admin.keuangan.dashboard') }}" class="flex items-center px-4 py-3 text-sm font-medium rounded-lg transition-all duration-150 {{ Route::is('admin.keuangan.dashboard') ? 'bg-emerald-800 text-white shadow-inner' : 'text-emerald-100 hover:bg-emerald-800/50' }}">
                     <i class="fa-solid fa-chart-pie mr-3 text-base text-emerald-400"></i> Ringkasan Kas
                 </a>
-                <a href="{{ route('admin.keuangan.kas.index') }}" class="flex items-center px-4 py-3 text-sm font-medium rounded-lg transition-all duration-150 {{ Route::is('admin.keuangan.kas.index') ? 'bg-emerald-800 text-white shadow-inner' : 'text-emerald-100 hover:bg-emerald-800/50' }}">
+                <a href="{{ route('admin.keuangan.kas.index') }}" class="flex items-center px-4 py-3 text-sm font-medium rounded-lg transition-all duration-150 {{ Route::is('admin.keuangan.kas') ? 'bg-emerald-800 text-white shadow-inner' : 'text-emerald-100 hover:bg-emerald-800/50' }}">
                     <i class="fa-solid fa-book-open mr-3 text-base text-emerald-400"></i> Buku Kas Umum
                 </a>
-                <!--<a href="{{ route('admin.keuangan.spp.index') }}" class="flex items-center px-4 py-3 text-sm font-medium rounded-lg transition-all duration-150 {{ Route::is('admin.keuangan.spp.index') ? 'bg-emerald-800 text-white shadow-inner' : 'text-emerald-100 hover:bg-emerald-800/50' }}">
+                <a href="{{ route('admin.keuangan.kategori.index') }}" class="flex items-center px-4 py-3 text-sm font-medium rounded-lg transition-all duration-150 {{ Route::is('admin.keuangan.kategori') ? 'bg-emerald-800 text-white shadow-inner' : 'text-emerald-100 hover:bg-emerald-800/50' }}">
+                    <i class="fa-solid fa-tags mr-3 text-base text-emerald-400"></i> Kategori Transaksi
+                </a>
+                <a href="{{ route('admin.keuangan.spp.index') }}" class="flex items-center px-4 py-3 text-sm font-medium rounded-lg transition-all duration-150 {{ Route::is('admin.keuangan.spp') ? 'bg-emerald-800 text-white shadow-inner' : 'text-emerald-100 hover:bg-emerald-800/50' }}">
                     <i class="fa-solid fa-user-graduate mr-3 text-base text-emerald-400"></i> SPP Bulanan Santri
-                </a>-->
+                </a>
+                <a href="{{ route('admin.keuangan.iuran_lain.index') }}" class="flex items-center px-4 py-3 text-sm font-medium rounded-lg transition-all duration-150 {{ Route::is('admin.keuangan.iuran_lain') ? 'bg-emerald-800 text-white shadow-inner' : 'text-emerald-100 hover:bg-emerald-800/50' }}">
+                    <i class="fa-solid fa-hand-holding-dollar mr-3 text-base text-emerald-400"></i> Pembayaran Non-SPP
+                </a>
             </nav>
         </div>
 

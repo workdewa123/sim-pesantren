@@ -16,12 +16,12 @@ class PembayaranSpp extends Model
         'bulan',
         'tahun',
         'nominal_bayar',
+        'metode_pembayaran',
         'status_pembayaran',
         'tanggal_bayar',
         'nama_bendahara'
     ];
 
-    // Relasi balik ke data Santri
     public function santri()
     {
         return $this->belongsTo(Santri::class, 'santri_id');

@@ -110,7 +110,8 @@ class PelanggaranController extends Controller
     // 4. Form Menginput Pelanggaran Baru
     public function create()
     {
-        if (!Auth::user()->hasRole('pencatat')) {
+        // Cek ketat menggunakan kolom role database
+        if (Auth::user()->role !== 'pencatat') {
             abort(403, 'Hanya petugas pencatat yang diizinkan mengakses halaman input.');
         }
 
@@ -119,12 +120,11 @@ class PelanggaranController extends Controller
 
         return view('admin.pelanggaran.create', compact('daftarKelas', 'daftarSantri'));
     }
-
     // 5. Simpan Catatan Pelanggaran
     public function store(Request $request)
     {
-        if (!Auth::user()->hasRole('pencatat')) {
-            abort(403);
+        if (Auth::user()->role !== 'pencatat') {
+            abort(403, 'Hanya petugas pencatat yang diizinkan.');
         }
 
         $request->validate([
@@ -153,4 +153,20 @@ class PelanggaranController extends Controller
         DB::table('pelanggaran')->where('id', $id)->delete();
         return redirect()->route('admin.pelanggaran.index')->with('success', 'Catatan pelanggaran berhasil dihapus!');
     }
+
+// ==========================================
+    // API UNTUK MENGAMBIL SANTRI BERDASARKAN KELAS
+    // ==========================================
+    public function getSantriByKelas($kelas_id)
+    {
+        $santri = \DB::table('santri')
+            ->where('kelas_id', $kelas_id)
+            ->where('status_santri', 'aktif')
+            ->orderBy('nama_santri', 'asc')
+            ->select('id', 'nama_santri')
+            ->get();
+
+        return response()->json($santri);
+    }
+    
 }

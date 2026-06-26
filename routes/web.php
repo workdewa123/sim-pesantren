@@ -12,6 +12,7 @@ use App\Http\Controllers\Admin\KeuanganController;
 use App\Http\Controllers\LandingPageController;
 use App\Http\Controllers\Media\MediaController;
 
+
 // Route Autentikasi
 Route::get('/login', [AuthController::class, 'showLogin'])->name('login');
 Route::post('/login', [AuthController::class, 'login']);
@@ -20,6 +21,7 @@ Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 // 🌐 1. RUTE PUBLIK: Landing Page Utama (Bisa diakses siapa saja)
 Route::get('/home', [LandingPageController::class, 'index'])->name('landing.index');
 Route::get('/home/kegiatan/{slug}', [LandingPageController::class, 'detailKegiatan'])->name('landing.kegiatan.detail');
+Route::get('/home/masyayikh/{slug}', [LandingPageController::class, 'detailMasyayikh'])->name('landing.masyayikh.detail');
 
 
 // 👥 2. RUTE DASHBOARD: Khusus Staf Media & Admin Utama (Terproteksi Spatie)
@@ -36,8 +38,17 @@ Route::middleware(['auth', 'role:staf_media'])->prefix('dashboard-media')->group
     Route::get('/kegiatan', [MediaController::class, 'indexKegiatan'])->name('media.kegiatan.index');
     Route::post('/kegiatan/store', [MediaController::class, 'storeKegiatan'])->name('media.kegiatan.store');
     Route::get('/kegiatan/{id}/edit', [MediaController::class, 'editKegiatan']);
-    Route::put('/kegiatan/{id}/update', [MediaController::class, 'updateKegiatan'])->name('media.kegiatan.update');
+    Route::post('/kegiatan/{id}/update', [MediaController::class, 'updateKegiatan'])->name('media.kegiatan.update');
     Route::delete('/kegiatan/{id}/delete', [MediaController::class, 'destroyKegiatan'])->name('media.kegiatan.destroy');
+
+    // Tempelkan di dalam Route::middleware(['auth', 'role:staf_media'])->prefix('dashboard-media')->group(function () { ... })
+
+// CRUD Masyayikh Pesantren
+    Route::get('/masyayikh', [App\Http\Controllers\Media\MasyayikhController::class, 'index'])->name('media.masyayikh.index');
+    Route::post('/masyayikh/simpan', [App\Http\Controllers\Media\MasyayikhController::class, 'store'])->name('media.masyayikh.store');
+    Route::get('/masyayikh/{id}/edit', [App\Http\Controllers\Media\MasyayikhController::class, 'edit'])->name('media.masyayikh.edit');
+    Route::post('/masyayikh/update/{id}', [App\Http\Controllers\Media\MasyayikhController::class, 'update'])->name('media.masyayikh.update');
+    Route::delete('/masyayikh/hapus/{id}', [App\Http\Controllers\Media\MasyayikhController::class, 'destroy'])->name('media.masyayikh.destroy');
 });
 
 Route::get('/', function () {
@@ -115,6 +126,9 @@ Route::middleware(['auth', 'role:pengawas|pencatat'])->prefix('admin')->group(fu
     Route::get('/pelanggaran/tambah', [PelanggaranController::class, 'create'])->name('admin.pelanggaran.create');
     Route::post('/pelanggaran/simpan', [PelanggaranController::class, 'store'])->name('admin.pelanggaran.store');
     Route::delete('/pelanggaran/hapus/{id}', [PelanggaranController::class, 'destroy'])->name('admin.pelanggaran.destroy');
+
+    // Cari baris ini di dalam grup middleware staf_pencatat_pelanggaran:
+    Route::get('/get-santri/{kelas_id}', [PelanggaranController::class, 'getSantriByKelas'])->name('admin.pelanggaran.get_santri');
 });
 
 // Rute Publik untuk Wali Santri (Ganti rute closure lama dengan ini)
@@ -133,22 +147,52 @@ Route::get('/pendaftaran/sukses/{id}/cetak-biaya', [App\Http\Controllers\Admin\P
 Route::middleware(['auth', 'role:bendahara'])->prefix('admin/keuangan')->group(function () {
     
     // 📊 Dasbor Utama Keuangan (Grafik Kas & Ringkasan Total Saldo)
+    // =========================================================================
+    // 💰 MODUL MANAJEMEN KEUANGAN UTAMA (ADMIN)
+    // =========================================================================
     Route::get('/dashboard', [App\Http\Controllers\Admin\KeuanganController::class, 'dashboard'])->name('admin.keuangan.dashboard');
     
     // 💵 Sub-Modul 1: Buku Kas Umum (Pemasukan & Pengeluaran Operasional)
     Route::get('/kas-umum', [App\Http\Controllers\Admin\KeuanganController::class, 'indexKas'])->name('admin.keuangan.kas.index');
     Route::post('/kas-umum/simpan', [App\Http\Controllers\Admin\KeuanganController::class, 'storeKas'])->name('admin.keuangan.kas.store');
+    Route::put('/kas-umum/update/{id}', [App\Http\Controllers\Admin\KeuanganController::class, 'updateKas'])->name('admin.keuangan.kas.update'); // 🌟 TAMBAHAN UNTUK EDIT MODAL
     Route::delete('/kas-umum/hapus/{id}', [App\Http\Controllers\Admin\KeuanganController::class, 'destroyKas'])->name('admin.keuangan.kas.destroy');
 
     // 🧑‍🎓 Sub-Modul 2: Pembayaran SPP Bulanan Santri
     Route::get('/spp', [App\Http\Controllers\Admin\KeuanganController::class, 'indexSpp'])->name('admin.keuangan.spp.index');
+    Route::post('/spp/store-pembayaran', [App\Http\Controllers\Admin\KeuanganController::class, 'storePembayaranSpp'])->name('admin.keuangan.spp.store');
     Route::post('/spp/bayar/{id}', [App\Http\Controllers\Admin\KeuanganController::class, 'prosesBayarSpp'])->name('admin.keuangan.spp.bayar');
-    
-    // 🌟 UBAH BARIS INI DARI GET MENJADI POST:
+    Route::put('/spp/update/{id}', [App\Http\Controllers\Admin\KeuanganController::class, 'updateSpp'])->name('admin.keuangan.spp.update'); // 🌟 TAMBAHAN UNTUK EDIT MODAL
     Route::post('/spp/generate-tagihan', [App\Http\Controllers\Admin\KeuanganController::class, 'generateTagihanBulanan'])->name('admin.keuangan.spp.generate');
+    Route::get('/spp/get-santri-by-kelas/{kelas_id}', [App\Http\Controllers\Admin\KeuanganController::class, 'getSantriByKelas'])->name('admin.keuangan.spp.get_santri');
+
+    // 🏷️ Sub-Modul Tambahan: Pengelola Kategori Transaksi Buku Kas
+    Route::get('/kategori', [App\Http\Controllers\Admin\KeuanganController::class, 'indexKategori'])->name('admin.keuangan.kategori.index');
+    Route::post('/kategori/simpan', [App\Http\Controllers\Admin\KeuanganController::class, 'storeKategori'])->name('admin.keuangan.kategori.store');
+    Route::put('/kategori/update/{id}', [App\Http\Controllers\Admin\KeuanganController::class, 'updateKategori'])->name('admin.keuangan.kategori.update'); // 🌟 TAMBAHAN UNTUK EDIT MODAL
+    Route::delete('/kategori/hapus/{id}', [App\Http\Controllers\Admin\KeuanganController::class, 'destroyKategori'])->name('admin.keuangan.kategori.destroy');
 
     // 🖨️ Sub-Modul 3: Unduh Laporan Resmi Keuangan
     Route::post('/laporan/cetak', [App\Http\Controllers\Admin\KeuanganController::class, 'cetakLaporan'])->name('admin.keuangan.laporan.cetak');
-
     Route::post('/laporan/excel', [App\Http\Controllers\Admin\KeuanganController::class, 'exportExcel'])->name('admin.keuangan.laporan.excel');
-});
+
+    // Pastikan baris-baris ini ada di dalam prefix('/keuangan') Anda:
+    Route::put('/spp/update/{id}', [App\Http\Controllers\Admin\KeuanganController::class, 'updateSpp'])->name('admin.keuangan.spp.update');
+    Route::delete('/spp/hapus/{id}', [App\Http\Controllers\Admin\KeuanganController::class, 'destroySpp'])->name('admin.keuangan.spp.destroy');
+    // Tambahkan ini di dalam group middleware bendahara pada web.php
+    Route::post('/spp/laporan-matriks', [App\Http\Controllers\Admin\KeuanganController::class, 'exportMatriksExcel'])->name('admin.keuangan.spp.laporan_matriks');
+    // Tambahkan route ini di web.php (di dalam grup bendahara)
+    Route::post('/spp/laporan-matriks/preview', [App\Http\Controllers\Admin\KeuanganController::class, 'previewMatriksHtml'])->name('admin.keuangan.spp.laporan_matriks.preview');
+
+    // =========================================================================
+    // 🏦 SUB-MODUL BARU: MANAJEMEN IURAN LAIN-LAIN (NON-SPP)
+    // =========================================================================
+    Route::get('/iuran-lain', [App\Http\Controllers\Admin\IuranLainController::class, 'index'])->name('admin.keuangan.iuran_lain.index');
+    Route::post('/iuran-lain/store', [App\Http\Controllers\Admin\IuranLainController::class, 'store'])->name('admin.keuangan.iuran_lain.store');
+    Route::put('/iuran-lain/update/{id}', [App\Http\Controllers\Admin\IuranLainController::class, 'update'])->name('admin.keuangan.iuran_lain.update');
+    Route::delete('/iuran-lain/hapus/{id}', [App\Http\Controllers\Admin\IuranLainController::class, 'destroy'])->name('admin.keuangan.iuran_lain.destroy');
+    
+    // Rute Tambahan untuk Transaksi Loket Pembayaran Iuran Lain
+    Route::post('/iuran-lain/bayar', [App\Http\Controllers\Admin\IuranLainController::class, 'storePembayaran'])->name('admin.keuangan.iuran_lain.bayar');
+
+    });
