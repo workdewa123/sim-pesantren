@@ -5,10 +5,6 @@
 
 @section('content')
 <div class="space-y-4 text-xs">
-    @if(session('success'))
-        <div class="p-3 bg-emerald-50 border border-emerald-200 text-emerald-800 rounded-xl font-medium">{{ session('success') }}</div>
-    @endif
-
     <div class="flex justify-between items-center bg-white p-4 rounded-2xl border border-slate-200/80 shadow-sm">
         <span class="font-bold text-slate-700 text-sm">Daftar Kategori Transaksi</span>
         <button type="button" onclick="openModal('modalCreateKategori')" class="bg-emerald-800 hover:bg-emerald-900 text-white font-bold rounded-xl px-4 py-2 shadow-sm transition-colors">

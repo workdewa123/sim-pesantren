@@ -5,12 +5,6 @@
 
 @section('content')
 <div class="space-y-4 text-xs">
-    @if(session('success'))
-        <div class="p-3 bg-emerald-50 border border-emerald-200 text-emerald-800 rounded-xl font-medium shadow-sm flex items-center gap-2 animate-in fade-in duration-200">
-            <i class="fa-solid fa-circle-check text-emerald-600"></i>
-            {{ session('success') }}
-        </div>
-    @endif
 
     <div class="bg-white p-4 rounded-2xl border border-slate-200/80 shadow-sm flex flex-col sm:flex-row justify-between items-center gap-3">
         <form action="{{ route('admin.keuangan.kas.index') }}" method="GET" class="flex flex-col sm:flex-row flex-1 gap-3 w-full">

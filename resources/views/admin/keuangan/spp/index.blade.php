@@ -5,17 +5,6 @@
 
 @section('content')
 <div class="space-y-4 text-xs">
-    @if(session('success'))
-        <div class="p-3 bg-emerald-50 border border-emerald-200 text-emerald-800 rounded-xl font-medium">
-            {{ session('success') }}
-        </div>
-    @endif
-    @if(session('error'))
-        <div class="p-3 bg-rose-50 border border-rose-200 text-rose-800 rounded-xl font-medium">
-            {{ session('error') }}
-        </div>
-    @endif
-
     <div class="bg-white p-4 rounded-2xl border border-slate-200/80 shadow-sm space-y-3">
         <form action="{{ route('admin.keuangan.spp.index') }}" method="GET" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-3 items-end">
             <div>

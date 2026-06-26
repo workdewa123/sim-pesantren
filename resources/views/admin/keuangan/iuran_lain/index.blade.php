@@ -5,16 +5,7 @@
 
 @section('content')
 <div class="space-y-4 text-xs">
-    @if(session('success'))
-        <div class="p-3 bg-emerald-50 border border-emerald-200 text-emerald-800 rounded-xl font-medium">
-            {{ session('success') }}
-        </div>
-    @endif
-    @if(session('error'))
-        <div class="p-3 bg-rose-50 border border-rose-200 text-rose-800 rounded-xl font-medium">
-            {{ session('error') }}
-        </div>
-    @endif
+
 
     <div class="flex flex-wrap items-center justify-between gap-3 bg-white p-4 rounded-2xl border border-slate-200/80 shadow-sm">
         <form action="{{ route('admin.keuangan.iuran_lain.index') }}" method="GET" class="flex items-center gap-2 w-full sm:w-auto">
