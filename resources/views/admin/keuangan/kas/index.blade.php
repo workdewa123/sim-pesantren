@@ -14,6 +14,11 @@
                 <option value="pemasukan" {{ request('jenis') == 'pemasukan' ? 'selected' : '' }}>Pemasukan</option>
                 <option value="pengeluaran" {{ request('jenis') == 'pengeluaran' ? 'selected' : '' }}>Pengeluaran</option>
             </select>
+            <select name="metode" class="w-full sm:w-auto px-3 py-2 rounded-xl border border-slate-200 bg-white focus:outline-none focus:border-emerald-600">
+                <option value="">-- Semua Metode Kas --</option>
+                <option value="rekening" {{ request('metode') == 'rekening' ? 'selected' : '' }}>Rekening</option>
+                <option value="cash" {{ request('metode') == 'cash' ? 'selected' : '' }}>Cash</option>
+            </select>
             <button type="submit" class="w-full sm:w-auto px-4 py-2 bg-slate-800 hover:bg-slate-900 text-white font-semibold rounded-xl transition-colors">
                 <i class="fa-solid fa-filter mr-1"></i> Filter
             </button>

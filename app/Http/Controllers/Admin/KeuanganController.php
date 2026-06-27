@@ -92,6 +92,9 @@ class KeuanganController extends Controller
         if ($request->filled('jenis')) {
             $query->where('jenis_transaksi', $request->jenis);
         }
+        if ($request->filled('metode')) {
+            $query->where('metode_pembayaran', $request->metode);
+        }
 
         $daftarKas = $query->orderBy('tanggal_transaksi', 'desc')->orderBy('id', 'desc')->paginate(10);
 
@@ -165,9 +168,19 @@ class KeuanganController extends Controller
     }
 
     // --- PENGELOLA KATEGORI ---
-    public function indexKategori()
+    public function indexKategori(Request $request)
     {
-        $kategoris = Kategori::orderBy('tipe_kategori', 'asc')->get();
+        $search = request('search');
+        $tipekategori = request()->get('tipe_kategori');
+        $kategoris = Kategori::query()
+            ->when($search, function ($query, $search) {
+                return $query->where('nama_kategori', 'like', '%' . $search . '%');
+            })
+            ->when($tipekategori, function ($query, $tipekategori) {
+                return $query->where('tipe_kategori', $tipekategori);
+            })
+            ->orderBy('nama_kategori', 'asc')
+            ->paginate(10);
         
         // 🌟 DIUBAH: Mengarah ke folder admin.keuangan.kategori.index
         return view('admin.keuangan.kategori.index', compact('kategoris'));

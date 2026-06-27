@@ -5,9 +5,35 @@
 
 @section('content')
 <div class="space-y-4 text-xs">
-    <div class="flex justify-between items-center bg-white p-4 rounded-2xl border border-slate-200/80 shadow-sm">
-        <span class="font-bold text-slate-700 text-sm">Daftar Kategori Transaksi</span>
-        <button type="button" onclick="openModal('modalCreateKategori')" class="bg-emerald-800 hover:bg-emerald-900 text-white font-bold rounded-xl px-4 py-2 shadow-sm transition-colors">
+    <div class="flex flex-col lg:flex-row lg:justify-between lg:items-center gap-4 bg-white p-4 rounded-2xl border border-slate-200/80 shadow-sm">
+        <span class="font-bold text-slate-700 text-sm whitespace-nowrap">Daftar Kategori Transaksi</span>
+        
+        <!-- Form Pencarian & Filter -->
+        <form action="{{ route('admin.keuangan.kategori.index') }}" method="GET" class="flex flex-col sm:flex-row flex-wrap items-stretch sm:items-center gap-2 w-full lg:w-auto lg:justify-end">
+            
+            <input type="text" name="search" value="{{ request('search') }}" placeholder="Cari nama kategori..." class="w-full sm:w-48 md:w-60 px-3 py-1.5 rounded-xl border border-slate-200 focus:outline-none focus:border-emerald-600 focus:ring-2 focus:ring-emerald-600/10">
+            
+            <select name="tipe_kategori" class="w-full sm:w-auto px-3 py-1.5 rounded-xl border border-slate-200 bg-white focus:outline-none focus:border-emerald-600">
+                <option value="">-- Semua Aliran Kas --</option>
+                <option value="pemasukan" {{ request('tipe_kategori') == 'pemasukan' ? 'selected' : '' }}>Pemasukan</option>
+                <option value="pengeluaran" {{ request('tipe_kategori') == 'pengeluaran' ? 'selected' : '' }}>Pengeluaran</option>
+            </select>
+
+            <div class="flex items-center gap-1.5 w-full sm:w-auto">
+                <button type="submit" class="flex-1 sm:flex-none px-4 py-1.5 bg-slate-800 hover:bg-slate-900 text-white font-bold rounded-xl shadow-sm transition-colors whitespace-nowrap">
+                    <i class="fa-solid fa-magnifying-glass mr-1"></i> Cari
+                </button>
+                
+                @if(request()->anyFilled(['search', 'tipe_kategori']))
+                    <a href="{{ route('admin.keuangan.kategori.index') }}" class="px-2.5 py-1.5 bg-slate-100 hover:bg-slate-200 text-slate-600 font-bold rounded-xl transition-colors" title="Reset Filter">
+                        <i class="fa-solid fa-arrow-rotate-left"></i>
+                    </a>
+                @endif
+            </div>
+        </form>
+
+        <!-- Tombol Tambah Kategori -->
+        <button type="button" onclick="openModal('modalCreateKategori')" class="w-full lg:w-auto bg-emerald-800 hover:bg-emerald-900 text-white font-bold rounded-xl px-4 py-2 shadow-sm transition-colors text-center whitespace-nowrap">
             <i class="fa-solid fa-plus mr-1"></i> Tambah Kategori
         </button>
     </div>
